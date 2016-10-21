@@ -1,0 +1,375 @@
+﻿@{
+    ViewBag.Title = "Create Chart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <link rel="stylesheet" href="~/Content/css/libs/bootstrap/bootstrap-multiselect.css" />
+    
+    <script src="~/Content/js/libs/jquery/jquery.tabletojson.js"></script>
+    <script src="~/Content/js/libs/d3/d3-tip.js"></script>
+    <script src="~/Content/js/libs/d3/d3.layout.cloud.js"></script>
+    <script src="~/Content/js/libs/d3/d3-boxplot.js"></script>
+    <script src="~/Content/js/libs/d3/d3-sankey.js"></script>
+    <script src="~/Content/js/libs/d3/d3-radar.js"></script>
+    <script src="~/Content/js/libs/bootstrap/bootstrap-multiselect.js"></script>
+    <script src="~/Content/js/libs/bootstrap/bootstrap-filestyle.min.js"></script>
+
+    <script src="~/Content/js/custom/ko-create-chart.js"></script>
+}
+
+@section body{
+    <div class="margin-t-lg"></div>
+    
+    <!--text area-->
+    <div id="ko-create-chart" class="container-fluid">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-offset-1 col-md-10 col-sm-12">
+                    <div class="row" data-bind="visible: isGridMode">
+                        <div class="col-md-12 scroll-table">
+                            <table id="tbl-data-grid" class="table table-bordered table-striped table-condensed"></table>
+                        </div>
+                        <div class="col-md-12 text-center margin-t-sm">
+                            <input type="button" value="Update Chart" class="btn btn-info" data-bind="click: updateChart" />
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs" data-bind="visible: !isGridMode()">
+                        <li class="active">
+                            <a data-toggle="tab" href="#csv-data">CSV</a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#tsv-data">TSV</a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#excel-data">Excel</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" data-bind="visible: !isGridMode()">
+                        <div id="csv-data" class="tab-pane fade in active">
+                            <textarea id="txtCsvInput" class="form-control" rows="15" data-bind="value: inputData" placeholder="Enter CSV..."></textarea>
+                            
+                            <div class="text-center margin-t-sm">
+                                <input type="button" id="btnParseCsv" class="btn btn-info" data-bind="click: parseCsv" value="Parse CSV" />
+                            </div>
+                        </div>
+                        <div id="tsv-data" class="tab-pane fade in">
+                            <textarea id="txtTsvInput" class="form-control" rows="15" data-bind="value: inputData" placeholder="Enter TSV..."></textarea>
+                            <div class="text-center margin-t-sm">
+                                <input type="button" id="btnParseTsv" class="btn btn-info" data-bind="click: parseTsv" value="Parse TSV" />
+                            </div>
+                        </div>
+                        <div id="excel-data" class="tab-pane fade">
+                            <form id="form-file" data-bind="submit: submitFormFile">
+                                <div class="form-group">
+                                    <div class="col-lg-12">
+                                        <input type="file" id="flExcel" class="filestyle" data-buttonName="btn-info" data-placeholder="Choose file..." data-bind="change: inputChange" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <textarea id="txtExcelInput" class="form-control hidden" data-bind="value: inputData" rows="13" placeholder="Parsed data will appear here..." readonly></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group margin-b-none">
+                                    <div class="col-lg-12">
+                                        <div id="alert-upload-error" class="alert alert-danger padding-lg hidden">
+                                            <span class="close" data-hide="alert" aria-label="close">&times;</span>
+                                            <h5 class="margin-t-none margin-b-none">
+                                                <i class="glyphicon glyphicon-remove-sign pull-left"></i>
+                                                <label>Unable to upload file, something went wrong.</label>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div id="dv-progess-cotainer" class="progress margin-b-none">
+                                        <div id="dv-progress" class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div id="dv-excel-data" class="col-lg-12">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-9">
+                            <button type="button" class="btn btn-sm btn-default" title="Toggle grid mode" data-bind="visible: showGridToggle, click: toggleGridMode">
+                                <i class="glyphicon glyphicon-th-list"></i>
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="ddlSampleData" class="form-control" data-bind="event: { change: ddlSampleDataChange}">
+                                <option value="0">Choose sample data</option>
+                                <option value="scatter.csv">Scatter</option>
+                                <option value="movies.csv">Movies</option>
+                                <option value="countries.csv">Countries</option>
+                                <option value="populationpyramid.csv">Population</option>
+                                <option value="motionplot.csv">Motion Plot</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-items">
+                    <li class="sidebar-li">
+                        <a id="a-dimensions" href="javascript:;" data-toggle="collapse" data-target="#dv-dimensions">Dimensions</a>
+                        <div id="dv-dimensions" class="collapse margin-b-md">
+                            <select id="lst-dimensions" class="form-control margin-b-lg width-lg" multiple></select>
+                        </div>
+                    </li>
+                    <li class="sidebar-li">
+                        <a href="javascript:;" data-toggle="collapse" data-target="#dv-measures">Measures</a>
+                        <div id="dv-measures" class="collapse">
+                            <select id="lst-measures" class="form-control margin-b-lg" multiple></select>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div id="page-content-wrapper">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <div class="form-horizontal">
+                            <!--warning alert-->
+                            <div id="dv-alerts-container" class="form-group margin-b-none">
+                                <div id="alert-data-warning" class="alert alert-warning hidden margin-b-sm">
+                                    <span class="close" data-hide="alert" aria-label="close">&times;</span>
+                                    <span>
+                                        <i class="glyphicon glyphicon-warning-sign"></i>
+                                        <label>Selected graph requies following parameters:</label>
+                                    </span>
+                                    <ol id="lst-params-warning" type="1" class="margin-b-none"></ol>
+                                </div>
+                            </div>
+
+                            <div id="dv-customization-widget" class="form-group border-all img-rounded margin-b-sm">
+                                <div class="col-md-6">
+                                    <div class="row margin-b-sm margin-t-sm">
+                                        <div class="col-sm-3">
+                                            <label for="txtGraphWidth">Width:</label>
+                                            <input type="number" id="txtGrpahWidth" class="form-control" min="300" step="20" data-bind="value: width" />
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label for="txtGrpahHeight">Height:</label>
+                                            <input type="number" id="txtGrpahHeight" class="form-control" min="200" step="10" data-bind="value: height" />
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label for="txtFontSize">Font Size:</label>
+                                            <input type="number" id="txtFontSize" class="form-control" min="1" value="11" data-bind="value: fontSize" />
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label for="ddlFontFamily">Font Family:</label>
+                                            <select id="ddlFontFamily" class="form-control" data-bind="value: fontFamily">
+                                                <option value="inherit" selected>Body</option>
+                                                <option value="cursive">Cursive</option>
+                                                <option value="fantasy">Fantasy</option>
+                                                <option value="monospace">Monospace</option>
+                                                <option value="serif">Serif</option>
+                                                <option value="sans-serif">Sans Serif</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row margin-b-sm">
+                                        <div class="col-sm-3">
+                                            <label for="txtGraphTitle">Title:</label>
+                                            <input type="text" id="txtGraphTitle" class="form-control" data-bind="value: title" />
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label for="ddlTitleFont">Title Font:</label>
+                                            <select id="ddlTitleFont" class="form-control" data-bind="value: titleFont">
+                                                <option value="inherit" selected>Body</option>
+                                                <option value="cursive">Cursive</option>
+                                                <option value="fantasy">Fantasy</option>
+                                                <option value="monospace">Monospace</option>
+                                                <option value="serif">Serif</option>
+                                                <option value="sans-serif">Sans Serif</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label for="txtTitleSize">Title Size:</label>
+                                            <input type="number" id="txtTitleSize" class="form-control" data-bind="value: titleSize" />
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label for="chkLabels">Labels:</label>
+                                            <p>
+                                                <input type="checkbox" id="chkLabels" data-bind="checked: showLabels, event: { change: toggleLabels }" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="dv-dimensions-container" class="col-md-6 connected-dimension margin-t-sm border-left">
+                                        <p class="text-center text-placeholder">Selected Dimensions</p>
+                                    </div>
+                                    <div id="dv-measures-container" class="col-md-6 connected-measure margin-t-sm border-left">
+                                        <p class="text-center text-placeholder">Selected Measures</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div id="dv-theming-widget" class="col-md-9 border-all img-rounded">
+                                    <div class="row margin-b-sm">
+                                        <div class="col-md-1 margin-t-sm">
+                                            <label for="ddlTheme" class="control-label">Theme</label>
+                                        </div>
+                                        <div class="col-md-3 margin-t-sm">
+                                            <select id="ddlTheme" class="form-control" data-bind="value: theme, event: {change: ddlThemeChange}">
+                                                <option value="jungle-green">Jungle Green</option>
+                                                <option value="lava-red">Lava Red</option>
+                                                <option value="smoke-grey" selected>Smoke Grey</option>
+                                                <option value="space-blue" >Space Blue</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1 margin-t-sm">
+                                            <label for="ddlShapeSize" class="control-label">Size</label>
+                                        </div>
+                                        <div class="col-md-3 margin-t-sm">
+                                            <select id="ddlShapeSize" class="form-control" data-bind="value: shapeSize, event: { change: ddlShapeSizeChange}">
+                                                <option value="1">Smallest</option>
+                                                <option value="2">Smaller</option>
+                                                <option value="3" selected>Default</option>
+                                                <option value="4">Larger</option>
+                                                <option value="5">Largest</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1 margin-t-sm">
+                                            <label for="ddlScale" class="control-label">Scale</label>
+                                        </div>
+                                        <div class="col-md-3 margin-t-sm">
+                                            <select id="ddlScale" class="form-control" data-bind="value: scaleType">
+                                                <option value="linear">Linear</option>
+                                                <option value="log">Log</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="dv-thumbs-widget" class="col-md-3 border-all img-rounded">
+                                    <div class="row">
+                                        <div class="col-sm-4" data-toggle="tooltip" data-placement="top" title="Scatter Plot">
+                                            <img src="~/Content/images/graph-thumbs/scatter-plot.jpg" class="img-thumbnail" height="50" width="50" data-bind="click: scatterPlot" />
+                                        </div>
+                                        <div class="col-sm-4" data-toggle="tooltip" data-placement="top" title="Stream Graph">
+                                            <img src="~/Content/images/graph-thumbs/stream-graph.png" class="img-thumbnail" height="50" width="50" data-bind="click: streamGraph" />
+                                        </div>
+                                        <div class="col-sm-4" data-toggle="tooltip" data-placement="top" title="Word Cloud">
+                                            <img src="~/Content/images/graph-thumbs/word-cloud.png" class="img-thumbnail" height="50" width="50" data-bind="click: wordCloud" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4" data-toggle="tooltip" data-placement="top" title="Bubble Chart">
+                                            <img src="~/Content/images/graph-thumbs/bubble-chart.png" class="img-thumbnail" height="50" width="50" data-bind="click: bubbleChart" />
+                                        </div>
+                                        <div class="col-sm-4" data-toggle="tooltip" data-placement="top" title="Treemap">
+                                            <img src="~/Content/images/graph-thumbs/treemap.png" class="img-thumbnail" height="50" width="50" data-bind="click: treeMap" />
+                                        </div>
+                                        <div class="col-sm-4" data-toggle="tooltip" data-placement="top" title="Force Directed Graph">
+                                            <img src="~/Content/images/graph-thumbs/force-directed.png" class="img-thumbnail" height="50" width="50" data-bind="click: forceDirectedGraph" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4" data-toggle="tooltip" data-placement="top" title="Sunburst Partition">
+                                            <img src="~/Content/images/graph-thumbs/sunburst-partition.png" class="img-thumbnail" height="50" width="50" data-bind="click: sunburstPartition" />
+                                        </div>
+                                        <div class="col-sm-4" data-toggle="tooltip" data-placement="top" title="Sankey Diagram">
+                                            <img src="~/Content/images/graph-thumbs/sankey.jpg" class="img-thumbnail" height="50" width="50" data-bind="click: sankeyDiagram" />
+                                        </div>
+                                        <div class="col-sm-4" data-toggle="tooltip" data-placement="top" title="Heatmap">
+                                            <img src="~/Content/images/graph-thumbs/heatmap.png" class="img-thumbnail" height="50" width="50" data-bind="click: heatmap" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4" data-toggle="tooltip" data-placement="top" title="Radar Chart">
+                                            <img src="~/Content/images/graph-thumbs/radar-chart.png" class="img-thumbnail" height="50" width="50" data-bind="click: radarChart" />
+                                        </div>
+                                        <div class="col-sm-4" data-toggle="tooltip" data-placement="top" title="Radial Reingold–Tilford Tree">
+                                            <img src="~/Content/images/graph-thumbs/tilford-tree.png" class="img-thumbnail" height="50" width="50" data-bind="click: tilfordTree" />
+                                        </div>
+                                        <div class="col-sm-4" data-toggle="tooltip" data-placement="top" title="Collapsible Tree">
+                                            <img src="~/Content/images/graph-thumbs/collapsible-tree.png" class="img-thumbnail" height="50" width="50" data-bind="click: collapisbleTree" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4" data-toggle="tooltip" data-placement="top" title="Motion Plot">
+                                            <img src="~/Content/images/graph-thumbs/motion-plot.png" class="img-thumbnail" height="50" width="50" data-bind="click: motionPlot" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group margin-t-lg">
+                                <h2 id="lblGraphTitle" class="text-muted text-center text-uppercase margin-t-none" data-bind="text: title, style: {'font-family': titleFont, 'font-size': titleSize() + 'px'}"></h2>
+                                <div id="dv-legend" class="col-lg-12 text-center" data-bind="foreach: lstLegendIcons">
+                                    <span>
+                                        <i class="glyphicon glyphicon-stop icon-legend" data-bind="style: {color: color}, attr: { 'data-legend': name }"></i>
+                                        <label data-bind="text: name"></label>
+                                        <input type="checkbox" class="check-legend" data-bind="attr: { 'data-legend': name }" checked />
+                                    </span>
+                                </div>
+                                <div id="dv-chart-container" class="col-lg-12 text-center">
+                                    @Html.Raw(ViewBag.SvgData)
+                                </div>
+                                <div class="col-lg-12 margin-t-md text-center" data-bind="visible: showSaveButton">
+                                    <button type="button" class="btn btn-primary" data-bind="click: saveChart">Save to Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--context menu-->
+        <div id="context-menu">
+            <input type="color" id="clrElementColor" data-bind="value: color, event: {change: clrChange}" />
+        </div>
+
+        <!--tooltip-->
+        <div class="tip" data-bind="foreach: lstTooltipElements">
+            <p>
+                <span data-bind="text: key"></span>: <span data-bind="text: value"></span>
+            </p>
+        </div>
+
+        <!--html templates-->
+        <script id="temp-sheet-names" type="text/template">
+            <p class="margin-b-none">
+                <label>Select sheet: </label>
+            </p>
+            {{#.}}
+            <label class="btn btn-warning">
+                <input type="radio" name="chkSheetName" class="checkbox-inline" value="{{name}}">{{name}}
+            </label>
+            {{/.}}
+        </script>
+        <script id="temp-data-grid" type="text/template">
+            <thead class="bg-muted">
+                <tr>
+                    {{#headers}}
+                        <th class="text-capitalize">{{.}}</th>
+                    {{/headers}}
+                </tr>
+            </thead>
+            <tbody>
+                {{#rows}}
+                    <tr>
+                        {{#columns}}
+                            <td contenteditable="true">{{.}}</td>
+                        {{/columns}}
+                    </tr>
+                {{/rows}}
+            </tbody>
+        </script>
+        <script id="temp-params-warning" type="text/template">
+            {{#.}}
+            <li>
+                {{.}}
+            </li>
+            {{/.}}
+        </script>
+    </div>
+}

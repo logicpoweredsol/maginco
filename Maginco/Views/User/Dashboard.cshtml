@@ -1,0 +1,105 @@
+﻿@model Maginco.Models.DashboardModel
+
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_UserDashboard.cshtml";
+}
+
+@section scripts{
+
+    <link href="~/Content/css/libs/jquery/datatables.css" rel="stylesheet" />
+
+    <script src="~/Content/js/libs/jquery/datatables.min.js"></script>
+    <script src="~/Content/js/libs/jquery/canvag.js"></script>
+    <script src="~/Content/js/custom/ko-dashboard.js"></script>
+}
+
+@section dashboardBody{
+    <div class="col-md-12 well">
+        <div class="col-md-4">
+            <h2 class="text-light margin-t-none">
+                @Model.firstName
+            </h2>
+            <h4 class="text-light margin-t-none">
+                @Model.companyName
+            </h4>
+            <p>
+                Your account expires on:
+                <label class="clr-theme-one">
+                    @Model.accountExpireDate
+                </label>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <h2 class="text-light margin-t-none clr-theme-two">
+                @Model.role
+            </h2>
+            <p class="margin-t-xl">
+                @{
+                    if (Model.role == Maginco.AppCode.AppConsts.AppRoles.PREMIUM.ToString())
+                    {
+                        <input type="submit" class="btn btn-info text-uppercase" value="Upgrade" disabled />
+                    }
+                    else
+                    {
+                        using (Html.BeginForm("UpgradeAccount", "User", FormMethod.Post, new { @class = "pull-left margin-r-md" }))
+                        {
+                            <input type="submit" class="btn btn-info text-uppercase" value="Upgrade" />
+                            @Html.HiddenFor(m => m.id)
+                            @Html.HiddenFor(m => m.firstName)
+                            @Html.HiddenFor(m => m.accountExpireDate)
+                        }
+                    }
+                }
+
+                @Html.ActionLink("Edit Profile", "EditProfile", new { }, new { @class = "btn btn-primary" })
+            </p>
+        </div>
+        <div class="col-md-4">
+            <h2 class="text-light text-muted">
+                *space for other details*
+            </h2>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <table id="tbl-charts" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Name</th>
+                    <th class="text-center">Date</th>
+                    <th class="text-center">Cost</th>
+                    <th class="text-center">View</th>
+                    <th class="text-center">Download</th>
+                    <th class="text-center">Edit</th>
+                </tr>
+            </thead>
+        </table>
+        <form id="form-edit-chart" action="/User/CreateChart" method="post" hidden>
+            <textarea id="svgData" name="svgData">
+            </textarea>
+        </form>
+    </div>
+    <div class="col-md-12 left">
+        <div class="col-md-4 col-md-offset-1" style="background-image: url('../../Resc/images/theme/effect.png'); height: 290px; margin-top: 20px;">
+            <p style="font-size: 40px; color: white; text-align:center;"> Chat with us</p>
+            <img src="~/Resc/images/theme/myBar.png" class="block">
+            <p class="pColor" style="text-align: center; margin-top: 17px;">Lorem Ipsum is simply dummy text of the printing and <br> typesetting industry. Lorem Ipsum has been the industry's<br> standard dummy text ever <br> since the 1500s, when an unknown printer took.</p>
+            <a href="#">
+                <img src="~/Resc/images/theme/contact.png" class="block">
+            </a>
+        </div>
+        <div class="col-md-4 col-md-offset-2" style="background-image: url('../../Resc/images/theme/effect1.png'); height: 290px; margin-top: 20px;">
+            <p style="font-size: 38px; color: white; text-align: center; padding-top: 42px;">
+                Create a NEW CHART <br> TODAY!
+            </p>
+            <a href="#">
+                <img src="~/Resc/images/theme/create.png" class="block" style="margin-top: 15px;">
+            </a>
+        </div>
+    </div>
+    <div id="dv-img" class="col-md-12 left">
+        <canvas id="temp-canvas" class="hidden"></canvas>
+    </div>
+}
+

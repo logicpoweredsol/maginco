@@ -1,0 +1,54 @@
+﻿@model Maginco.Models.DashboardModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    @RenderSection("scripts", false)
+}
+
+@section body{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 col">
+                <div class="myNav">
+                    @{
+                        var imagePath = String.Concat("/Resc/images/users/", Model.id, ".png");
+                        <img src="@imagePath" class="img-circle">
+                    }
+                </div>
+                <ul class="myList row-eq-height">
+                    <li>
+                        <a href="/User/Dashboard">
+                            <img src="~/Resc/images/theme/bl1.png" class="icon"> DASHBOARD
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/User/CreateChart">
+                            <img src="~/Resc/images/theme/l2.png" class="icon"> NEW CHART
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#contact">
+                            <img src="~/Resc/images/theme/l3.png" class="icon"> SUPPORT
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#about">
+                            <img src="~/Resc/images/theme/l4.png" class="icon"> CONTACT US
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/auth/Logout">
+                            <img src="~/Resc/images/theme/l5.png" class="icon"> LOGOUT
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-10 col" style="float:right" id="ko-dashboard">
+                @RenderSection("dashboardBody", true)
+            </div>
+        </div>
+    </div>
+}
