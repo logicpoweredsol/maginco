@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Edit Users";
+    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
+}
+
+@section scripts{
+    <link href="~/Content/css/libs/jquery/datatables.css" rel="stylesheet" />
+
+    <script src="~/Content/js/libs/jquery/datatables.min.js"></script>
+    <script src="~/Content/js/custom/admin-edit-users.js"></script>
+}
+
+@section adminDashboardBody{
+    <div class="col-md-12 well">
+        <h2 class="text-center text-light">Users</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <table id="tbl-users" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Cell</th>
+                            <th>Email Confirmed</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+}

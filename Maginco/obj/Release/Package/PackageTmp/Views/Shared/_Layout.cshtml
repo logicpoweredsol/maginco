@@ -1,0 +1,181 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    <!--styles-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400" rel="stylesheet" />
+    <link href="~/Content/css/libs/bootstrap/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/css/libs/jquery/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/css/libs/jquery/jquery-ui.theme.css" rel="stylesheet" />
+    <link href="~/Content/css/theme.css" rel="stylesheet" />
+    <link href="~/Content/css/custom.css" rel="stylesheet" />
+
+    <!--scripts-->
+    <script src="~/Content/js/libs/jquery/jquery-2.2.3.min.js"></script>
+    <script src="~/Content/js/libs/jquery/jquery-ui.min.js"></script>
+    <script src="~/Content/js/libs/ko/knockout-min.js"></script>
+    <script src="~/Content/js/libs/bootstrap/bootstrap.min.js"></script>
+    <script src="~/Content/js/libs/bootstrap/bootstrap-validator.js"></script>
+    <script src="~/Content/js/libs/underscore/underscore-min.js"></script>
+    <script src="~/Content/js/libs/jquery/jquery.bxslider.min.js"></script>
+    <script src="~/Content/js/libs/jquery/mustache.js"></script>
+    <script src="~/Content/js/libs/jquery/moment.js"></script>
+    <script src="~/Content/js/libs/d3/d3.v3.min.js"></script>
+    
+    <script src="~/Content/js/custom/ko-layout.js"></script>
+
+    <!--page scripts-->
+    @RenderSection("scripts", false)
+</head>
+<body id="ko-body">
+
+    <!--header-->
+    <header>
+        <div style="background-color: #370574">
+            <div class="container">
+                <ul id="topNav" class="margin">
+                    @{ if (Request.IsAuthenticated)
+                        {
+                            <li class="myHeader">
+                                <p>
+                                    <a href="/auth/Logout" style="text-decoration: none; color:white;">
+                                        <i class="glyphicon glyphicon-log-out myGlyphicon" style="color: white;"></i> Logout
+                                    </a>
+
+                                    <a href="/user/UpdateEmail" class="margin-l-md" style="text-decoration: none; color:white;">
+                                        <i class="glyphicon glyphicon-envelope myGlyphicon" style="color: white;"></i> Update Email
+                                    </a>
+                                </p>
+                            </li>
+                        }
+                        else
+                        {
+                            <li style="padding-right: 20px;" class="myHeader">
+                                <p>
+                                    <a href="/Auth/Login" style="text-decoration: none !important; color: white;">
+                                        <i class="glyphicon glyphicon-user" style="color: white;"></i> Login
+                                    </a>
+                                </p>
+                            </li>
+                            <li class="myHeader">
+                                <p>
+                                    <a href="/Auth/Register" style="text-decoration: none; color:white;">
+                                        <i class="glyphicon glyphicon-pencil myGlyphicon" style="color: white;"></i> Register
+                                    </a>
+                                </p>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+
+        </div>
+        <div id="header-menu-sub" style="width:100%; background-color: #1b023a">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="/Home/Index">
+                        <img src="~/Resc/images/theme/logo.png">
+                    </a>
+                </div>
+                <ul class="nav navbar-nav" style="float:right;">
+                    @{ if (Request.IsAuthenticated)
+                        {
+                            <li class="one"><a href="/User/Dashboard" class="q">Dashboard</a></li>
+                            <li class="two"><a href="/User/CreateChart" class="w">Create Chart</a></li>
+                        }
+                        else
+                        {
+                            <li class="one"><a href="/Home/Index" class="q">Home</a></li>
+                            <li class="two"><a href="/Home/Pricing" class="w">Pricing</a></li>
+                        }
+                    }
+                    <li class="three"><a href="#" class="e">About Us</a></li>
+                    <li class="four"><a href="#" class="r">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- ko stopBinding: true -->
+    @RenderSection("body", true)
+    <!-- /ko -->
+
+    <footer id="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div id="colors-row" class="col-md-offset-2 col-md-10">
+                    <img src="~/Resc/images/theme/style1.png" />
+                    <img src="~/Resc/images/theme/style.png" />
+                    <img src="~/Resc/images/theme/styleTwo.png" />
+                    <img src="~/Resc/images/theme/styleThree.png" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8">
+                    <div class="col-md-4">
+                        <h3 class="text-white margin-t-lg">Get in touch</h3>
+                        <p class="text-white margin-t-lg">
+                            <i class="glyphicon glyphicon-envelope text-green"> </i> Email LogicPowered.net
+                        </p>
+                        <p class="text-white margin-t-lg">&copy; 2016 Maginco. All rights reserved.</p>
+                        <p class="text-white margin-t-lg">Design by Design R</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 class="text-white margin-t-lg">Follow Us</h3>
+                        <p class="text-white margin-t-lg">
+                            <img src="~/Resc/images/theme/facebookIcon.png" /> Like us on Facebook
+                        </p>
+                        <p class="text-white margin-t-lg"><img src="/Resc/images/theme/youtubeIcon.png"> Watch videos on Youtube</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 class="text-white margin-t-lg">Links</h3>
+                        <p class="text-white margin-t-lg">
+                            Terms and Conditions
+                        </p>
+                        <p class="text-white margin-t-lg">Privacy policy for now</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!--success modal-->
+    <div class="modal modal-wide fade" id="dv-success-modal" tabindex="-1" role="dialog" aria-labelledby="success">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body bg-success">
+                    <h5 class="text-success margin-b-sm margin-t-sm">
+                        <i class="glyphicon glyphicon-ok"></i>
+                        <label  id="lbl-success">
+                        </label>
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--error modal-->
+    <div class="modal modal-wide fade" id="dv-error-modal" tabindex="-1" role="dialog" aria-labelledby="error">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body bg-danger">
+                    <h5 class="text-danger margin-b-sm margin-t-sm">
+                        <i class="glyphicon glyphicon-remove-sign pull-left"></i>
+                        <label id="lbl-error"></label>
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--scroll top button-->
+    <div id="scroll-top-wrapper" class="pull-right text-center" data-toggle="tooltip" data-placement="top" title="Back to top" data-bind="click: scrollTop">
+        <i id="scroll-top" class="glyphicon glyphicon-circle-arrow-up label-lg"></i>
+    </div>
+</body>
+</html>

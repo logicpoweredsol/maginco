@@ -1,0 +1,82 @@
+﻿@model Maginco.Models.LoginModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <script src='@Url.Content("~/Content/js/custom/ko-login.js")'></script>
+}
+
+@section body{
+    <div class="margin-t-lg"></div>
+    
+    <div class="container-fluid" id="ko-login">
+    @using (Html.BeginForm("Login", "Auth", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        <div class="form-group">
+            <div class="col-md-offset-4 col-md-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="panel-title text-center">
+                            <h4>Login to continue</h4>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group margin-b-md">
+                            <div class="col-md-12">
+                                <div class="alert alert-danger" data-bind="visible: hasLoginError">
+                                    <label>Login failed!</label> Invalid username or password.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                    @Html.TextBoxFor(m => m.email, new { @class = "form-control", @placeholder = "Email Address", @required = "required" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    @Html.TextBoxFor(m => m.password, new { @class = "form-control", @placeholder = "Password", @type = "password", @required = "required" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="checkbox">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.rememberMe) Remember me
+                                    </label>
+                                    <span class="pull-right">
+                                        <a href="/Auth/ForgetPassword">Forgot Password</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12 text-center">
+                                <input type="submit" class="btn btn-success" value="Login" />
+                            </div>
+                        </div>
+                        <div class="form-group margin-b-sm">
+                            <div class="col-md-12">
+                                Don't have an account!
+                                <a href="/Auth/Register">
+                                    Register Here
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="hdnHasLoginError" value='@TempData["hasLoginError"]' />
+        </div>
+    }
+</div>
+}

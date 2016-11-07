@@ -1,0 +1,80 @@
+﻿@model Maginco.Models.RegisterModel
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <script src="~/Content/js/custom/ko-register.js"></script>
+}
+
+@section body{
+    <div class="margin-t-lg"></div>
+
+    <div class="container-fluid" id="ko-register">
+        @using (Html.BeginForm("Register", "Auth", FormMethod.Post, new { @class = "form-horizontal", @role = "form", @data_toggle = "validator" }))
+        {
+            <div class="col-md-offset-4 col-md-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="panel-title text-center">
+                            <h4>Create new account</h4>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group margin-b-md">
+                                <div class="col-md-12">
+                                    <div class="alert alert-danger" data-bind="visible: hasRegisterError">
+                                        <label>Registration failed!</label>
+                                        <span>  We're sorry, something went wrong.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(m => m.emailAddress)
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.emailAddress, new { @class = "form-control", @type="email", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(m => m.password)
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.password, new { @class = "form-control", @type = "password", @required = "required", @pattern = "^\\w*([A-Z])+\\w*$", @data_minlength = "6", @data_error = "Minimum of 6 characters and at least one capital letter." })
+                                </div>
+                                <div class="help-block with-errors text-center"></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" value="" required >
+                                            I agree to <a href="#">terms and condiotions.</a>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12 text-center">
+                                    <input type="submit" class="btn btn-success" value="Register" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12 text-center">
+                                    Already have an account? <a href="/Auth/Login"> Login</a> to continue.
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <input type="hidden" id="hdnHasRegisterError" value='@TempData["hasRegisterError"]' />
+            </div>
+        }
+    </div>
+}
+
+

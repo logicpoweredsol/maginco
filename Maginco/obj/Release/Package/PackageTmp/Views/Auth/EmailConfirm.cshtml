@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "EmailConfirm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section body{
+    <div class="margin-t-lg"></div>
+
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="col-md-12">
+                <div class="alert alert-success">
+                    <h2 class="text-light">
+                        Your account has now been activated.
+                    </h2>
+                    Please click @Html.ActionLink("here", "Login", "Auth", null, null) to login.
+                </div>
+            </div>
+        </div>
+    </div>
+}
