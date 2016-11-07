@@ -17,19 +17,19 @@ namespace Maginco.Models
             accountExpireDate = DateTime.Now.AddMonths(3).ToShortDateString();
         }
 
-        [DisplayName("First Name")]
+        [DisplayName("*First Name")]
         public string firstName { get; set; }
 
         [DisplayName("Middle Name")]
         public string middleName { get; set; }
 
-        [DisplayName("Last Name")]
+        [DisplayName("*Last Name")]
         public string lastName { get; set; }
 
-        [DisplayName("Contact Number")]
+        [DisplayName("*Contact Number")]
         public string contactNumber { get; set; }
 
-        [DisplayName("Address Line 1")]
+        [DisplayName("*Address Line 1")]
         public string addressLine1 { get; set; }
 
         [DisplayName("Address Line 2")]
@@ -38,19 +38,19 @@ namespace Maginco.Models
         [DisplayName("Address Line 3")]
         public string addressLine3 { get; set; }
 
-        [DisplayName("Post Code")]
+        [DisplayName("*Post Code")]
         public string postCode { get; set; }
 
-        [DisplayName("Country")]
+        [DisplayName("*Country")]
         public string country { get; set; }
 
-        [DisplayName("Email Address")]
+        [DisplayName("*Email Address")]
         public string emailAddress { get; set; }
 
-        [DisplayName("Password")]
+        [DisplayName("*Password")]
         public string password { get; set; }
 
-        [DisplayName("Company Name")]
+        [DisplayName("*Company Name")]
         public string companyName { get; set; }
 
         [DisplayName("Company Website")]

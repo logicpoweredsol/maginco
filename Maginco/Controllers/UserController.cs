@@ -93,14 +93,20 @@ namespace Maginco.Controllers
 
             if (updation.Succeeded)
             {
-                if(avatarFile != null)
+               
+                if (avatarFile != null)
                 {
-                    string ext = Path.GetExtension(avatarFile.FileName);
-                    string fileUrl = String.Concat(Server.MapPath("~/Resc/images/users/"), id, ext);
+                    string[] files = Directory.GetFiles(Server.MapPath("/Resc/images/users/"), id + ".*");
+                    foreach(string file in files)
+                    {
 
+                        System.IO.File.Delete(file);
+                    }
+                    string ext = Path.GetExtension(avatarFile.FileName);
+                    string fileUrl = String.Concat(Server.MapPath("/Resc/images/users/"), id, ext);
                     avatarFile.SaveAs(fileUrl);
                 }
-                
+              
                 return RedirectToAction("Dashboard");
             }
 
@@ -144,7 +150,7 @@ namespace Maginco.Controllers
 
                     var callbackUrl = Url.Action("EmailConfirm", "Auth", new { userId = appUser.Id, code = code }, protocol: Request.Url.Scheme);
 
-                    await manager.SendEmailAsync(appUser.Id, "Maginco-Account Confirmation", AppConsts.EmailTexts.GetEmailUpdateText(appUser.firstName, callbackUrl));
+                    await manager.SendEmailAsync(appUser.Id, "Vizfully-Account Confirmation", AppConsts.EmailTexts.GetEmailUpdateText(appUser.firstName, callbackUrl));
 
                     ViewBag.UpdateSuccess = "An email with activation link has been sent to the new email address.";
 
@@ -161,13 +167,40 @@ namespace Maginco.Controllers
             return View(model);
         }
 
+
+        //********* PayPal Intergration *********//
+
         [HttpPost]
-        public async Task<ActionResult> UpgradeAccount(DashboardModel model)
+        public ActionResult CreatePayment(DashboardModel model)
         {
-            /*
-             this is just a simulation of actual flow.
-             add payment gatway(s) here. confirm payment and then proceed to code below in transaction form.
-            */
+            string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority +
+            Request.ApplicationPath.TrimEnd('/') + "/";
+            var payment = AppCode.PayPal.PayPalPayment.CreatePayment(baseUrl, "sale");
+            TempData["User"] = model;
+            return Redirect(payment.GetApprovalUrl());
+        }
+
+        public ActionResult PaymentCancelled()
+        {
+            // TODO: Handle cancelled payment
+            return RedirectToAction("Dashboard");
+        }
+
+        public ActionResult PaymentSuccessful(string paymentId, string token, string PayerID)
+        {
+            // Execute Payment
+            TempData["UserModel"] = TempData["User"];
+            
+            var payment = AppCode.PayPal.PayPalPayment.ExecutePayment(paymentId, PayerID);
+            return RedirectToAction("UpgradeAccount");
+        }
+
+        //********* PayPal Intergration End *********//
+
+        [AllowAnonymous]
+        public async Task<ActionResult> UpgradeAccount()
+        {
+            var model = TempData["UserModel"] as DashboardModel;
 
             UserManager<AppUserModel> userManager = AuthManager.GetUserManager();
 

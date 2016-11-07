@@ -14,8 +14,12 @@
             <div class="col-md-2 col">
                 <div class="myNav">
                     @{
-                        var imagePath = String.Concat("/Resc/images/users/", Model.id, ".png");
-                        <img src="@imagePath" class="img-circle">
+                        string[] im =  Directory.GetFiles(string.Concat("D:/Projects/Maginco/Code/Maginco/Maginco/Resc/images/users/"), Model.id + ".*");
+                        if (im.Length !=0)
+                        {
+                            im[0] = im[0].Replace("D:/Projects/Maginco/Code/Maginco/Maginco/Resc/images/users/", "/Resc/images/users/");
+                        <img src="@im[0]" class="img-circle" style="width:80px;height:60px;border:groove">
+                        }
                     }
                 </div>
                 <ul class="myList row-eq-height">

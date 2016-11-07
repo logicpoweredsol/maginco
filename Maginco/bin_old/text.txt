@@ -1,0 +1,3 @@
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Maginco.AppCode.FileHandling.FileParsingHelper.GetExcelData() in D:\Projects\Maginco\Code\Maginco\Maginco\AppCode\FileHandling\FileParsingHelper.cs:line 61
+   at Maginco.Controllers.HomeController.UploadFile() in D:\Projects\Maginco\Code\Maginco\Maginco\Controllers\HomeController.cs:line 38

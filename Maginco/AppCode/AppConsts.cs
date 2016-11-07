@@ -28,7 +28,7 @@ namespace Maginco.AppCode
             public static string GetNewAccountText(string username, string callbackUrl)
             {
                 string url = String.Concat("<a href='", callbackUrl, "'>Activation Link</a>");
-                string str = String.Format("Dear {0}, Thank you for creating a new account with Maginco.com. In order to fully activate your account please click on the confirmation link below. If you have any issues or questions please email us support@maginco.com <br> {1}", username, url);
+                string str = String.Format("Dear {0}, Thank you for creating a new account with Vizfully.com. In order to fully activate your account please click on the confirmation link below. If you have any issues or questions please email us support@maginco.com <br> {1}", username, url);
 
                 return str;
             }
