@@ -523,12 +523,10 @@
     <Compile Include="AppCode\Auth\ClaimsManager.cs" />
     <Compile Include="AppCode\FileHandling\FileParsingHelper.cs" />
     <Compile Include="AppCode\PayPal\PayPalPayment.cs" />
-    <Compile Include="AppCode\PayPal\SandboxSDK.cs" />
     <Compile Include="AppCode\Services\EmailService.cs" />
     <Compile Include="AppCode\Services\GmailService.cs" />
     <Compile Include="App_Start\AutoMapperConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="Controllers\AuthController.cs" />
@@ -540,7 +538,6 @@
     <Compile Include="Models\ClaimsModel.cs" />
     <Compile Include="Models\DashboardModel.cs" />
     <Compile Include="Models\FileHandling\SheetData.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

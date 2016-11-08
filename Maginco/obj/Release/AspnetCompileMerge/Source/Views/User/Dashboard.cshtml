@@ -42,7 +42,7 @@
                     }
                     else
                     {
-                        using (Html.BeginForm("UpgradeAccount", "User", FormMethod.Post, new { @class = "pull-left margin-r-md" }))
+                        using (Html.BeginForm("CreatePayment", "User", FormMethod.Post, new { @class = "pull-left margin-r-md" }))
                         {
                             <input type="submit" class="btn btn-info text-uppercase" value="Upgrade" />
                             @Html.HiddenFor(m => m.id)

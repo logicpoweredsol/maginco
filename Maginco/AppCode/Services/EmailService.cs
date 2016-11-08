@@ -16,8 +16,8 @@ namespace Maginco.AppCode.Services
         {
             MailMessage msg = new MailMessage();
             
-            //msg.To.Add(emailMessage.Destination);
-            msg.To.Add("syed.ali@logicpowered.net");
+            msg.To.Add(emailMessage.Destination);
+            //msg.To.Add("syed.ali@logicpowered.net");
 
 
             msg.From = new MailAddress("noreply@maginco.com");

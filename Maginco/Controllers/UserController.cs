@@ -154,6 +154,11 @@ namespace Maginco.Controllers
 
                     ViewBag.UpdateSuccess = "An email with activation link has been sent to the new email address.";
 
+
+                    var ctx = Request.GetOwinContext();
+                    var authManager = ctx.Authentication;
+                    authManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+                    authManager.SignOut("ApplicationCookie");
                     return View(model);
                 }
 

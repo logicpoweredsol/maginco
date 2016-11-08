@@ -10,31 +10,43 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>10/21/2016 20:47:11</publishTime>
+      <publishTime>11/08/2016 20:32:59</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>10/21/2016 20:47:11</publishTime>
+      <publishTime>11/08/2016 20:32:59</publishTime>
     </File>
     <File Include="bin/AutoMapper.dll">
       <publishTime>08/12/2016 13:21:44</publishTime>
     </File>
     <File Include="bin/DataAccessLayer.dll">
-      <publishTime>10/21/2016 20:46:55</publishTime>
+      <publishTime>11/07/2016 16:26:53</publishTime>
+    </File>
+    <File Include="bin/EntityFix.dll">
+      <publishTime>04/19/2016 13:21:18</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
-      <publishTime>02/25/2014 01:34:42</publishTime>
+      <publishTime>03/02/2015 09:32:26</publishTime>
     </File>
     <File Include="bin/EntityFramework.SqlServer.dll">
-      <publishTime>02/25/2014 01:34:42</publishTime>
+      <publishTime>03/02/2015 09:32:26</publishTime>
     </File>
     <File Include="bin/Excel.dll">
       <publishTime>05/07/2014 09:57:36</publishTime>
     </File>
+    <File Include="bin/Facebook.dll">
+      <publishTime>04/13/2015 15:48:00</publishTime>
+    </File>
     <File Include="bin/ICSharpCode.SharpZipLib.dll">
       <publishTime>01/03/2011 14:16:38</publishTime>
     </File>
+    <File Include="bin/LinqToTwitter.AspNet.dll">
+      <publishTime>02/20/2016 16:56:14</publishTime>
+    </File>
+    <File Include="bin/LinqToTwitter.net.dll">
+      <publishTime>02/20/2016 16:56:14</publishTime>
+    </File>
     <File Include="bin/Maginco.dll">
-      <publishTime>10/21/2016 20:46:59</publishTime>
+      <publishTime>11/08/2016 20:32:43</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNet.Identity.Core.dll">
       <publishTime>04/03/2015 17:07:22</publishTime>
@@ -60,17 +72,176 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/Microsoft.Owin.Security.dll">
       <publishTime>02/13/2015 13:16:36</publishTime>
     </File>
+    <File Include="bin/Microsoft.Owin.Security.Facebook.dll">
+      <publishTime>02/13/2015 13:16:38</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Owin.Security.Google.dll">
+      <publishTime>02/13/2015 13:16:38</publishTime>
+    </File>
     <File Include="bin/Microsoft.Owin.Security.OAuth.dll">
       <publishTime>02/13/2015 13:16:40</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Owin.Security.Twitter.dll">
+      <publishTime>02/13/2015 13:16:42</publishTime>
     </File>
     <File Include="bin/Microsoft.Web.Infrastructure.dll">
       <publishTime>04/23/2012 15:23:58</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>08/03/2014 20:33:56</publishTime>
+      <publishTime>06/13/2016 23:06:14</publishTime>
     </File>
     <File Include="bin/Owin.dll">
       <publishTime>11/13/2012 12:19:34</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.ArcGISOnline.dll">
+      <publishTime>11/01/2016 18:20:18</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Asana.dll">
+      <publishTime>11/01/2016 18:20:20</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Backlog.dll">
+      <publishTime>11/01/2016 18:20:20</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Baidu.dll">
+      <publishTime>11/01/2016 18:20:20</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.BattleNet.dll">
+      <publishTime>11/01/2016 18:20:22</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Bitbucket.dll">
+      <publishTime>11/01/2016 18:20:22</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Box.dll">
+      <publishTime>11/01/2016 18:20:22</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Buffer.dll">
+      <publishTime>11/01/2016 18:20:22</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Cosign.dll">
+      <publishTime>11/01/2016 18:20:24</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.DeviantArt.dll">
+      <publishTime>11/01/2016 18:20:24</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Discord.dll">
+      <publishTime>11/01/2016 18:20:24</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.DoYouBuzz.dll">
+      <publishTime>11/01/2016 18:20:24</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Dropbox.dll">
+      <publishTime>11/01/2016 18:20:26</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.EVEOnline.dll">
+      <publishTime>11/01/2016 18:20:26</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Fitbit.dll">
+      <publishTime>11/01/2016 18:20:26</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Flickr.dll">
+      <publishTime>11/01/2016 18:20:28</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Foursquare.dll">
+      <publishTime>11/01/2016 18:20:28</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Geni.dll">
+      <publishTime>11/01/2016 18:20:28</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.GitHub.dll">
+      <publishTime>11/01/2016 18:20:28</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Gitter.dll">
+      <publishTime>11/01/2016 18:20:30</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.GooglePlus.dll">
+      <publishTime>11/01/2016 18:20:30</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.HealthGraph.dll">
+      <publishTime>11/01/2016 18:20:30</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Imgur.dll">
+      <publishTime>11/01/2016 18:20:32</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Instagram.dll">
+      <publishTime>11/01/2016 18:20:32</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.LinkedIn.dll">
+      <publishTime>11/01/2016 18:20:32</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.MyHeritage.dll">
+      <publishTime>11/01/2016 18:20:34</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Onshape.dll">
+      <publishTime>11/01/2016 18:20:34</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.OpenID.dll">
+      <publishTime>11/01/2016 18:20:34</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Orcid.dll">
+      <publishTime>11/01/2016 18:20:34</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.PayPal.dll">
+      <publishTime>11/01/2016 18:20:36</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Reddit.dll">
+      <publishTime>11/01/2016 18:20:36</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Salesforce.dll">
+      <publishTime>11/01/2016 18:20:36</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Shopify.dll">
+      <publishTime>11/01/2016 18:20:38</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Slack.dll">
+      <publishTime>11/01/2016 18:20:38</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.SoundCloud.dll">
+      <publishTime>11/01/2016 18:20:38</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Spotify.dll">
+      <publishTime>11/01/2016 18:20:38</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.StackExchange.dll">
+      <publishTime>11/01/2016 18:20:40</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Steam.dll">
+      <publishTime>11/01/2016 18:20:40</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.TripIt.dll">
+      <publishTime>11/01/2016 18:20:40</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Twitch.dll">
+      <publishTime>11/01/2016 18:20:42</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Untappd.dll">
+      <publishTime>11/01/2016 18:20:42</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Vimeo.dll">
+      <publishTime>11/01/2016 18:20:42</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.VisualStudio.dll">
+      <publishTime>11/01/2016 18:20:44</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.VKontakte.dll">
+      <publishTime>11/01/2016 18:20:44</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Wargaming.dll">
+      <publishTime>11/01/2016 18:20:44</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.WordPress.dll">
+      <publishTime>11/01/2016 18:20:44</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Xing.dll">
+      <publishTime>11/01/2016 18:20:46</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Yahoo.dll">
+      <publishTime>11/01/2016 18:20:46</publishTime>
+    </File>
+    <File Include="bin/Owin.Security.Providers.Yammer.dll">
+      <publishTime>11/01/2016 18:20:46</publishTime>
+    </File>
+    <File Include="bin/PayPal.dll">
+      <publishTime>07/21/2016 14:10:36</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe">
       <publishTime>06/18/2015 20:19:46</publishTime>
@@ -107,6 +278,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="bin/roslyn/VBCSCompiler.exe.config">
       <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/System.Data.Entity.Repository.dll">
+      <publishTime>03/25/2013 16:25:28</publishTime>
     </File>
     <File Include="bin/System.Web.Helpers.dll">
       <publishTime>01/28/2015 04:04:30</publishTime>
@@ -229,7 +403,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/18/2016 18:13:01</publishTime>
     </File>
     <File Include="Content/images/graph-thumbs/force-directed.png">
-      <publishTime>07/18/2016 18:13:01</publishTime>
+      <publishTime>10/28/2016 15:07:19</publishTime>
     </File>
     <File Include="Content/images/graph-thumbs/heatmap.png">
       <publishTime>07/18/2016 18:13:01</publishTime>
@@ -283,7 +457,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/06/2016 15:02:25</publishTime>
     </File>
     <File Include="Content/js/custom/ko-create-chart.js">
-      <publishTime>10/21/2016 20:14:44</publishTime>
+      <publishTime>10/26/2016 22:57:47</publishTime>
     </File>
     <File Include="Content/js/custom/ko-dashboard.js">
       <publishTime>10/17/2016 16:37:28</publishTime>
@@ -376,10 +550,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/04/2016 18:11:55</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>10/21/2016 15:05:42</publishTime>
+      <publishTime>11/03/2016 13:48:16</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>10/21/2016 20:47:01</publishTime>
+      <publishTime>11/08/2016 20:32:46</publishTime>
     </File>
     <File Include="Resc/images/theme/13428586_10153661707706711_9137131089217469024_n-lightbox.png">
       <publishTime>09/21/2016 13:43:15</publishTime>
@@ -498,6 +672,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Resc/images/theme/leftIndicator.png">
       <publishTime>09/21/2016 13:43:15</publishTime>
     </File>
+    <File Include="Resc/images/theme/linkedin_connect.png">
+      <publishTime>11/02/2016 12:41:34</publishTime>
+    </File>
     <File Include="Resc/images/theme/logo.png">
       <publishTime>09/21/2016 13:43:15</publishTime>
     </File>
@@ -598,10 +775,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/26/2016 19:08:05</publishTime>
     </File>
     <File Include="Views/Auth/Login.cshtml">
-      <publishTime>09/26/2016 17:07:29</publishTime>
+      <publishTime>11/04/2016 18:31:54</publishTime>
     </File>
     <File Include="Views/Auth/Register.cshtml">
-      <publishTime>10/18/2016 16:28:48</publishTime>
+      <publishTime>11/04/2016 18:34:19</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
       <publishTime>09/21/2016 14:42:39</publishTime>
@@ -613,10 +790,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/06/2016 14:36:36</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>10/20/2016 14:07:46</publishTime>
+      <publishTime>11/04/2016 18:23:10</publishTime>
     </File>
     <File Include="Views/Shared/_UserDashboard.cshtml">
-      <publishTime>10/20/2016 13:24:00</publishTime>
+      <publishTime>11/07/2016 21:22:28</publishTime>
     </File>
     <File Include="Views/User/AdminPanel.cshtml">
       <publishTime>10/06/2016 14:39:32</publishTime>
@@ -625,13 +802,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/17/2016 16:36:26</publishTime>
     </File>
     <File Include="Views/User/Dashboard.cshtml">
-      <publishTime>10/20/2016 18:13:34</publishTime>
+      <publishTime>11/04/2016 15:14:11</publishTime>
     </File>
     <File Include="Views/User/EditCharts.cshtml">
       <publishTime>10/06/2016 15:03:57</publishTime>
     </File>
     <File Include="Views/User/EditProfile.cshtml">
-      <publishTime>10/20/2016 11:49:21</publishTime>
+      <publishTime>11/08/2016 20:12:13</publishTime>
     </File>
     <File Include="Views/User/EditUsers.cshtml">
       <publishTime>10/06/2016 15:03:47</publishTime>
@@ -646,7 +823,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/18/2016 18:13:10</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/21/2016 15:11:42</publishTime>
+      <publishTime>11/08/2016 20:32:44</publishTime>
     </File>
   </ItemGroup>
 </Project>

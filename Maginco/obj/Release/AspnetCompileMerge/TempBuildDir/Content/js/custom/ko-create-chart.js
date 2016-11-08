@@ -1931,7 +1931,7 @@ function generateSunburstPartition() {
     var measures = chartViewModel.lstMeasures();
     var parsedData = chartViewModel.parsedData();
 
-    //if (dimensions.length > 0 && measures.length > 0) {
+    if (dimensions.length > 0 && measures.length > 0) {
         Helper.clearSvgContainer();
         Helper.focusSvgContainer();
 
@@ -1961,7 +1961,7 @@ function generateSunburstPartition() {
                     .append("g")
                     .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")");
 
-        var root = Helper.csvToTree(parsedData, measures);
+        var root = Helper.csvToTree(parsedData, dimensions);
 
         var partition = d3.layout
                             .partition()
@@ -2037,10 +2037,10 @@ function generateSunburstPartition() {
         function computeTextRotation(d) {
             return (xScale(d.x + d.dx / 2) - Math.PI / 2) / Math.PI * 180;
         }
-    //}
-    //else {
-    //    Helper.showParamsWarning(["One or more dimensions for hierarchy.", "Measure for size."]);
-    //}
+    }
+    else {
+        Helper.showParamsWarning(["One or more dimensions for hierarchy.", "Measure for size."]);
+    }
 }
 
 function generateSankeyDiagram() {

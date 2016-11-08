@@ -21,3 +21,7 @@ D:\Projects\Maginco\Code\Maginco\DataAccessLayer\bin\Release\Microsoft.Owin.xml
 D:\Projects\Maginco\Code\Maginco\DataAccessLayer\bin\Release\Microsoft.Owin.Security.xml
 D:\Projects\Maginco\Code\Maginco\DataAccessLayer\bin\Release\Microsoft.Owin.Security.OAuth.xml
 D:\Projects\Maginco\Code\Maginco\DataAccessLayer\bin\Release\Newtonsoft.Json.xml
+D:\Projects\Maginco\Code\Maginco\DataAccessLayer\bin\Release\EntityFix.dll
+D:\Projects\Maginco\Code\Maginco\DataAccessLayer\bin\Release\Microsoft.Owin.Security.Twitter.dll
+D:\Projects\Maginco\Code\Maginco\DataAccessLayer\bin\Release\System.Data.Entity.Repository.dll
+D:\Projects\Maginco\Code\Maginco\DataAccessLayer\bin\Release\Microsoft.Owin.Security.Twitter.xml
