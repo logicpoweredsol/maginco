@@ -114,9 +114,9 @@
             </div>
         </div>
         <div id="wrapper">
-            <div id="sidebar-wrapper">
-                <ul class="sidebar-items">
-                    <li class="sidebar-li">
+            <div id="sidebar-wrapper" style="overflow:visible">
+                <ul class="list-unstyled" id="listitem">
+                    @*<li class="sidebar-li">
                         <a id="a-dimensions" href="javascript:;" data-toggle="collapse" data-target="#dv-dimensions">Dimensions</a>
                         <div id="dv-dimensions" class="collapse margin-b-md">
                             <select id="lst-dimensions" class="form-control margin-b-lg width-lg" multiple></select>
@@ -127,7 +127,7 @@
                         <div id="dv-measures" class="collapse">
                             <select id="lst-measures" class="form-control margin-b-lg" multiple></select>
                         </div>
-                    </li>
+                    </li>*@
                 </ul>
             </div>
             <div id="page-content-wrapper">
@@ -137,7 +137,7 @@
                             <!--warning alert-->
                             <div id="dv-alerts-container" class="form-group margin-b-none">
                                 <div id="alert-data-warning" class="alert alert-warning hidden margin-b-sm">
-                                    <span class="close" data-hide="alert" aria-label="close">&times;</span>
+                                    <span class="close" data-hide="alert" aria-label="close" >&times;</span>
                                     <span>
                                         <i class="glyphicon glyphicon-warning-sign"></i>
                                         <label>Selected graph requies following parameters:</label>
@@ -145,72 +145,91 @@
                                     <ol id="lst-params-warning" type="1" class="margin-b-none"></ol>
                                 </div>
                             </div>
-
-                            <div id="dv-customization-widget" class="form-group border-all img-rounded margin-b-sm">
-                                <div class="col-md-6">
-                                    <div class="row margin-b-sm margin-t-sm">
-                                        <div class="col-sm-3">
-                                            <label for="txtGraphWidth">Width:</label>
-                                            <input type="number" id="txtGrpahWidth" class="form-control" min="300" step="20" data-bind="value: width" />
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label for="txtGrpahHeight">Height:</label>
-                                            <input type="number" id="txtGrpahHeight" class="form-control" min="200" step="10" data-bind="value: height" />
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label for="txtFontSize">Font Size:</label>
-                                            <input type="number" id="txtFontSize" class="form-control" min="1" value="11" data-bind="value: fontSize" />
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label for="ddlFontFamily">Font Family:</label>
-                                            <select id="ddlFontFamily" class="form-control" data-bind="value: fontFamily">
-                                                <option value="inherit" selected>Body</option>
-                                                <option value="cursive">Cursive</option>
-                                                <option value="fantasy">Fantasy</option>
-                                                <option value="monospace">Monospace</option>
-                                                <option value="serif">Serif</option>
-                                                <option value="sans-serif">Sans Serif</option>
-                                            </select>
-                                        </div>
+                            <div class="row">
+                                <div class="col-md-12" >
+                                    <div id="dv-hirarchy-container" class="col-md-4  margin-t-sm border-all list-unstyled" style="height:auto;padding:10px">
+                                        <p class="text-center text-placeholder" style="font-size:12px;font-weight:600">Drop Clustering Attributes Here Numbers, String</p>
                                     </div>
-                                    <div class="row margin-b-sm">
-                                        <div class="col-sm-3">
-                                            <label for="txtGraphTitle">Title:</label>
-                                            <input type="text" id="txtGraphTitle" class="form-control" data-bind="value: title" />
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label for="ddlTitleFont">Title Font:</label>
-                                            <select id="ddlTitleFont" class="form-control" data-bind="value: titleFont">
-                                                <option value="inherit" selected>Body</option>
-                                                <option value="cursive">Cursive</option>
-                                                <option value="fantasy">Fantasy</option>
-                                                <option value="monospace">Monospace</option>
-                                                <option value="serif">Serif</option>
-                                                <option value="sans-serif">Sans Serif</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label for="txtTitleSize">Title Size:</label>
-                                            <input type="number" id="txtTitleSize" class="form-control" data-bind="value: titleSize" />
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label for="chkLabels">Labels:</label>
-                                            <p>
-                                                <input type="checkbox" id="chkLabels" data-bind="checked: showLabels, event: { change: toggleLabels }" />
-                                            </p>
-                                        </div>
+                                    <div id="dv-label-container" class="col-md-4 list-unstyled margin-t-sm border-all" style="height:auto;padding:10px">
+                                        <p class="text-center text-placeholder" style="font-size:12px;font-weight:600">Drop Labeling Attribute Here Numbers, String</p>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div id="dv-dimensions-container" class="col-md-6 connected-dimension margin-t-sm border-left">
-                                        <p class="text-center text-placeholder">Selected Dimensions</p>
-                                    </div>
-                                    <div id="dv-measures-container" class="col-md-6 connected-measure margin-t-sm border-left">
-                                        <p class="text-center text-placeholder">Selected Measures</p>
+                                    <div id="dv-size-container" class="col-md-4 list-unstyled margin-t-sm border-all" style="height:auto;padding:10px">
+                                        <p class="text-center text-placeholder" style="font-size:12px;font-weight:600">Drop Size Attribute Here Only Numbers</p>
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div id="dv-color-container" class="col-md-4 list-unstyled margin-t-sm border-all" style="height:auto;padding:10px">
+                                        <p class="text-center text-placeholder" style="font-size:12px;font-weight:600"> Drop Color Attribute Here </p>
+                                    </div>
+                                    <div id="dv-xaxsis-container" class="col-md-4 list-unstyled margin-t-sm border-all" style="height:auto;padding:10px">
+                                        <p class="text-center text-placeholder" style="font-size:12px;font-weight:600">Drop X-Axsis Attribute Here Only Numbers</p>
+                                    </div>
+                                    <div id="dv-yaxsis-container" class="col-md-4 list-unstyled margin-t-sm border-all" style="height:auto;padding:10px">
+                                        <p class="text-center text-placeholder" style="font-size:12px;font-weight:600">Drop Y-Axsis Attribute Here Only Number</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin:12px">
+                                <div id="dv-customization-widget" class="form-group border-all img-rounded margin-b-sm">
+                                    <div class="col-md-12">
+                                        <div class="row margin-b-sm margin-t-sm">
+                                            <div class="col-sm-3">
+                                                <label for="txtGraphWidth">Width:</label>
+                                                <input type="number" id="txtGrpahWidth" class="form-control" min="300" step="20" data-bind="value: width" />
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label for="txtGrpahHeight">Height:</label>
+                                                <input type="number" id="txtGrpahHeight" class="form-control" min="200" step="10" data-bind="value: height" />
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label for="txtFontSize">Font Size:</label>
+                                                <input type="number" id="txtFontSize" class="form-control" min="1" value="11" data-bind="value: fontSize" />
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label for="ddlFontFamily">Font Family:</label>
+                                                <select id="ddlFontFamily" class="form-control" data-bind="value: fontFamily">
+                                                    <option value="inherit" selected>Body</option>
+                                                    <option value="cursive">Cursive</option>
+                                                    <option value="fantasy">Fantasy</option>
+                                                    <option value="monospace">Monospace</option>
+                                                    <option value="serif">Serif</option>
+                                                    <option value="sans-serif">Sans Serif</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row margin-b-sm">
+                                            <div class="col-sm-3">
+                                                <label for="txtGraphTitle">Title:</label>
+                                                <input type="text" id="txtGraphTitle" class="form-control" data-bind="value: title" />
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label for="ddlTitleFont">Title Font:</label>
+                                                <select id="ddlTitleFont" class="form-control" data-bind="value: titleFont">
+                                                    <option value="inherit" selected>Body</option>
+                                                    <option value="cursive">Cursive</option>
+                                                    <option value="fantasy">Fantasy</option>
+                                                    <option value="monospace">Monospace</option>
+                                                    <option value="serif">Serif</option>
+                                                    <option value="sans-serif">Sans Serif</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label for="txtTitleSize">Title Size:</label>
+                                                <input type="number" id="txtTitleSize" class="form-control" data-bind="value: titleSize" />
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label for="chkLabels">Labels:</label>
+                                                <p>
+                                                    <input type="checkbox" id="chkLabels" data-bind="checked: showLabels, event: { change: toggleLabels }" />
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
 
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <div id="dv-theming-widget" class="col-md-9 border-all img-rounded">
                                     <div class="row margin-b-sm">

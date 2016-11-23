@@ -59,6 +59,12 @@ function ChartModel () {
     self.lstDimensions = ko.observableArray();
     self.lstMeasures = ko.observableArray();
     self.lstHeaders = ko.observableArray();
+    self.Hirarechya = ko.observableArray();
+    self.Sizea = ko.observable();
+    self.Colora = ko.observable();
+    self.Xaxsisa = ko.observable(null);
+    self.Yaxsisa = ko.observable(null);
+    self.Labela = ko.observable();
 
     self.inputChange = function () {
         $("#form-file").submit();
@@ -186,10 +192,10 @@ function ChartModel () {
     };
 
     self.updateChart = function () {
-        var tblData = $("#tbl-data-grid").tableToJSON();
+        //var tblData = $("#tbl-data-grid").tableToJSON();
 
-        self.parsedData(tblData);
-        Helper.clearTooltips();
+        //self.parsedData(tblData);
+        //Helper.clearTooltips();
 
         if (self.chartName() == enumCharts.scatterPlot) {
             generateScatterPlot();
@@ -465,7 +471,34 @@ function ChartModel () {
 };
 
 var Helper = new function () {
-
+   
+    $(document).on('click', '#close-icon', function() {
+        $(this).parent().slideUp("fast", function () {
+            var name = $(this).html();
+            var id = $(this).parent().attr('id');
+            $(this).remove()
+            if(id == "dv-hirarchy-container")
+            {
+                var newarr = _.without(chartViewModel.Hirarechya, name);
+                chartViewModel.Hirarechya(newarr);
+            }
+            if (id == "dv-label-container") {
+                chartViewModel.Labela = "";
+            }
+            if (id == "dv-size-container") {
+                chartViewModel.Sizea = "";
+            }
+            if (id == "dv-color-container") {
+                chartViewModel.Colora = "";
+            }
+            if (id == "dv-xaxsis-container") {
+                chartViewModel.Xaxsisa = "";
+            }
+            if (id == "dv-yaxsis-container") {
+                chartViewModel.Yaxsisa = "";
+            }
+        });
+    });
     this.initTooltips = function () {
         $('[data-toggle="tooltip"]').tooltip();
     }
@@ -523,19 +556,28 @@ var Helper = new function () {
 
     this.appendLists = function (measures, dimensions) {
 
-        $("#lst-measures").append(measures.join(''));
-        $("#lst-dimensions").append(dimensions.join(''));
-
-        $('#lst-measures').multiselect('rebuild');
-        $('#lst-dimensions').multiselect('rebuild');
+        //$("#lst-measures").append(measures.join(''));
+        $("#listitem").append(measures);
+        $("#listitem").append(dimensions);
+        $("#listitem li").draggable({
+            scroll: false,
+            cursor: 'move',
+            helper: 'clone',
+        });
+        $("#listitem li").addClass("Real-Attr");
+        //$('#single').multiselect('rebuild');
+        //$('#single').multiselect('rebuild');
     }
 
     this.clearLists = function () {
-        $("#lst-dimensions").html('');
-        $("#lst-measures").html('');
+        $("#listitem").html('');
 
-        $('#dv-dimensions-container').children().not('p').remove();
-        $('#dv-measures-container').children().not('p').remove();
+        $('#dv-hirarchy-container').children().not('p').remove();
+        $('#dv-label-container').children().not('p').remove();
+        $('#dv-size-container').children().not('p').remove();
+        $('#dv-color-container').children().not('p').remove();
+        $('#dv-xaxsis-container').children().not('p').remove();
+        $('#dv-yaxsis-container').children().not('p').remove();
     }
 
     this.clearTooltips = function () {
@@ -543,9 +585,8 @@ var Helper = new function () {
     }
 
     this.renderData = function () {
-
-        var optStart = "<option>";
-        var optEnd = "</option>";
+        var optStart = '<li id="droplist" class= "list-group-item" style="margin:2px;margin-left:20px">';
+        var optEnd = "</li>";
         var separator = "-";
         var value;
         var lstDimensions = [];
@@ -558,13 +599,15 @@ var Helper = new function () {
 
             for (var property in sampleObject) {
 
-                value = sampleObject[property];
-
+                value = sampleObject[property]
                 if (Helper.isNumber(value)) {
-                    lstMeasures.push(optStart + property + optEnd);
+                    //lstMeasures.push(optStart + property.toUpperCase() + '<span id="mydata"> || integer</span>' + optEnd);
+                    lstMeasures.push(optStart + property + '<span id="mydata"> || integer</span>' + optEnd);
+                
                 }
                 else {
-                    lstDimensions.push(optStart + property + optEnd);
+                    //lstDimensions.push(optStart + property.toUpperCase() + '<span id = "mydata"> || string</span>' + optEnd);
+                    lstDimensions.push(optStart + property + '<span id = "mydata"> || string</span>' + optEnd);
                 }
             }
         } catch (e) {
@@ -575,6 +618,84 @@ var Helper = new function () {
     }
 
     this.initWidgets = function () {
+        $("#dv-hirarchy-container, #dv-label-container, #dv-size-container, #dv-color-container, #dv-xaxsis-container, #dv-yaxsis-container ").droppable({
+            accept: ".list-group-item",
+           
+            drop: function (ev, ui) {
+                var c = $(ui.helper).find("span#mydata").text();
+               $(ui.helper).find("span#mydata").remove();
+                if ($(this).attr("id") == 'dv-hirarchy-container' && !$('#dv-hirarchy-container li:contains("' + $(ui.helper).html() + '")').length) {
+                    $(this).append('<li>' + $(ui.helper).html() + '<span class="close" id = "close-icon" >&times;</span>' + '</li>');
+                    var atv = $(ui.helper).html();
+                    //var p = $(ui.helper).html();
+                    //var atv = p.toLowerCase();
+                    chartViewModel.Hirarechya.push(atv);
+                }
+                if($(this).attr("id") == 'dv-label-container' && !$('#dv-label-container li:contains("' + $(ui.helper).html() + '")').length)
+                {
+                    if ($(this).children('li').length > 0) {
+                        $(this).children('li').remove();
+                        chartViewModel.Labela = "";
+                    }
+                    $(this).append('<li>' + $(ui.helper).html() + '<span class="close" id = "close-icon" >&times;</span>' + '</li>');
+                    chartViewModel.Labela = $(ui.helper).html();
+                    //var p = $(ui.helper).html();
+                    //chartViewModel.Labela = p.toLowerCase();
+                    chartViewModel.updateChart();
+                }
+                if ($(this).attr("id") == 'dv-size-container' && !$('#dv-size-container li:contains("' + $(ui.helper).html() + '")').length) {
+                    if (c == " || integer") {
+                        if ($(this).children('li').length > 0) {
+                            $(this).children('li').remove();
+                            chartViewModel.Sizea = "";
+                        }
+                        $(this).append('<li>' + $(ui.helper).html() + '<span class="close" id = "close-icon" >&times;</span>' + '</li>');
+                        chartViewModel.Sizea = $(ui.helper).html();
+                        //var p = $(ui.helper).html();
+                        //chartViewModel.Sizea = p.toLowerCase();
+                        chartViewModel.updateChart();
+                        
+                    }
+                }
+                if ($(this).attr("id") == 'dv-color-container' && !$('#dv-color-container li:contains("' + $(ui.helper).html() + '")').length) {
+                    if ($(this).children('li').length > 0) {
+                        $(this).children('li').remove();
+                        chartViewModel.Colora = "";
+                    }
+                    $(this).append('<li>' + $(ui.helper).html() + '<span class="close" id = "close-icon" >&times;</span>' + '</li>');
+                    chartViewModel.Colora = $(ui.helper).html();
+                    //var p = $(ui.helper).html();
+                    //chartViewModel.Colora = p.toLowerCase();
+                    chartViewModel.updateChart();
+                }
+                if ($(this).attr("id") == 'dv-xaxsis-container' && !$('#dv-xaxsis-container li:contains("' + $(ui.helper).html() + '")').length) {
+                    if (c == " || integer") {
+                    if ($(this).children('li').length > 0) {
+                        $(this).children('li').remove();
+                        chartViewModel.Xaxsisa = "";
+                    }
+                    $(this).append('<li>' + $(ui.helper).html() + '<span class="close" id = "close-icon" >&times;</span>' + '</li>');
+                    chartViewModel.Xaxsisa = $(ui.helper).html();
+                    //var p = $(ui.helper).html();
+                    //chartViewModel.Xaxsisa = p.toLowerCase();
+                    chartViewModel.updateChart();
+                }
+                }
+                if ($(this).attr("id") == 'dv-yaxsis-container' && !$('#dv-yaxsis-container li:contains("' + $(ui.helper).html() + '")').length) {
+                    if (c == " || integer") {
+                    if ($(this).children('li').length > 0) {
+                        $(this).children('li').remove();
+                        chartViewModel.Yaxsisa = "";
+                    }               
+                        $(this).append('<li>' + $(ui.helper).html() + '<span class="close" id = "close-icon" >&times;</span>' + '</li>');
+                        chartViewModel.Yaxsisa = $(ui.helper).html();
+                        //var p = $(ui.helper).html();
+                        //chartViewModel.Yaxsisa = p.toLowerCase();
+                        chartViewModel.updateChart();
+                    }
+                }
+                }
+        }).sortable();
         $("#dv-customization-widget").draggable();
         $("#dv-thumbs-widget").draggable();
         $("#dv-theming-widget").draggable();
@@ -1009,15 +1130,21 @@ $(function () {
 
 function generateScatterPlot() {
 
-    if (chartViewModel.lstMeasures().length > 1) {
+    //if (chartViewModel.lstMeasures().length > 1) {
+    if (chartViewModel.Xaxsisa.length > 0 && chartViewModel.Yaxsisa.length > 0 && chartViewModel.Sizea.length >0 ) {
+    //if(false){
         Helper.clearSvgContainer();
         Helper.focusSvgContainer();
         chartViewModel.clearLegends();
 
-        var selectedMeasureOne = chartViewModel.lstMeasures()[0];
-        var selectedMeasureTwo = chartViewModel.lstMeasures()[1];
-        var selectedMeasureThree = chartViewModel.lstMeasures()[2] === undefined ? "" : chartViewModel.lstMeasures()[2];
-        var selectedDimension = chartViewModel.lstDimensions()[0] === undefined ? "" : chartViewModel.lstDimensions()[0];
+        //var selectedMeasureOne = chartViewModel.Xaxsisa
+        //var selectedMeasureTwo = chartViewModel.lstMeasures()[1];
+        //var selectedMeasureThree = chartViewModel.lstMeasures()[2] === undefined ? "" : chartViewModel.lstMeasures()[2];
+        //var selectedDimension = chartViewModel.lstDimensions()[0] === undefined ? "" : chartViewModel.lstDimensions()[0];
+        var selectedMeasureOne = chartViewModel.Xaxsisa;
+        var selectedMeasureTwo = chartViewModel.Yaxsisa;
+        var selectedMeasureThree = chartViewModel.Sizea;
+        var selectedDimension = chartViewModel.Colora;
 
         var margin = { top: 20, right: 40, bottom: 30, left: 20 };
 
@@ -1254,8 +1381,10 @@ function generateScatterPlot() {
 
 function generateStreamGraph() {
 
-    var dimensions = chartViewModel.lstDimensions();
-    var selectedMeasure = chartViewModel.lstMeasures()[0];
+    //var dimensions = chartViewModel.lstDimensions();
+    //var selectedMeasure = chartViewModel.lstMeasures()[0];
+    var dimensions = chartViewModel.Hirarechya().slice();
+    var selectedMeasure = chartViewModel.Sizea;
 
     if (dimensions.length > 1 && Helper.isNotEmpty(selectedMeasure)) {
 
@@ -1474,8 +1603,8 @@ function generateStreamGraph() {
 
 function generateWordCloud() {
 
-    var selectedDimension = chartViewModel.lstDimensions()[0];
-    var selectedMeasure = chartViewModel.lstMeasures()[0];
+    var selectedDimension = chartViewModel.Labela;
+    var selectedMeasure = chartViewModel.Sizea;
 
     if (Helper.isNotEmpty(selectedDimension) && Helper.isNotEmpty(selectedMeasure))
     {
@@ -1575,7 +1704,7 @@ function generateWordCloud() {
 }
 
 function generateBubbleChart() {
-    if (chartViewModel.lstDimensions().length > 1 && chartViewModel.lstMeasures().length > 0) {
+    if (chartViewModel.Hirarechya().length > 0 && chartViewModel.Labela.length > 0 && chartViewModel.Sizea.length >0) {
 
         Helper.clearSvgContainer();
         Helper.focusSvgContainer();
@@ -1583,9 +1712,9 @@ function generateBubbleChart() {
         chartViewModel.clearLegends();
         arrSize = [];
 
-        var selectedDimensionOne = chartViewModel.lstDimensions()[0];
-        var selectedDimensionTwo = chartViewModel.lstDimensions()[1];
-        var selectedMeasureOne = chartViewModel.lstMeasures()[0];
+        var selectedDimensionOne = chartViewModel.Hirarechya()[0];
+        var selectedDimensionTwo = chartViewModel.Labela;
+        var selectedMeasureOne = chartViewModel.Sizea;
 
         var diameter = chartViewModel.width();
         var format = d3.format(",d");
@@ -1681,7 +1810,7 @@ function generateBubbleChart() {
 
 function generateTreemap() {
 
-    if (chartViewModel.lstDimensions().length > 0 && chartViewModel.lstMeasures().length > 0) {
+    if (chartViewModel.Hirarechya().length > 0 && chartViewModel.Sizea.length > 0) {
 
         Helper.clearSvgContainer();
         Helper.focusSvgContainer();
@@ -1689,8 +1818,8 @@ function generateTreemap() {
         chartViewModel.clearLegends();
         arrSize = [];
 
-        var selectedDimensionOne = chartViewModel.lstDimensions()[0];
-        var selectedMeasureOne = chartViewModel.lstMeasures()[0];
+        var selectedDimensionOne = chartViewModel.Hirarechya()[0];
+        var selectedMeasureOne = chartViewModel.Sizea;
 
         var width = chartViewModel.width() - 80; //1080
         var height = chartViewModel.height() - 180; //800
@@ -1698,7 +1827,7 @@ function generateTreemap() {
         var yScale = d3.scale.linear().range([0, height]);
         var color = d3.scale.category20c();
         var node;
-        var leafDimension = Helper.getLastElement(chartViewModel.lstDimensions());
+        var leafDimension = Helper.getLastElement(chartViewModel.Hirarechya());
 
         var treemap = d3.layout
                         .treemap()
@@ -1717,7 +1846,7 @@ function generateTreemap() {
                     .append("g")
                     .attr("transform", "translate(.5,.5)");
 
-        var root = Helper.csvToTree(chartViewModel.parsedData(), chartViewModel.lstDimensions());
+        var root = Helper.csvToTree(chartViewModel.parsedData(), chartViewModel.Hirarechya());
 
         var nodes = treemap.nodes(root)
                         .filter(function (d) { return !d.children; });
@@ -1808,12 +1937,12 @@ function generateTreemap() {
 
 function generateForceDirectedGraph() {
 
-    if (chartViewModel.lstDimensions().length > 1) {
+    if (chartViewModel.Hirarechya().length > 1) {
         Helper.clearSvgContainer();
         Helper.focusSvgContainer();
 
-        var selectedDimensionOne = chartViewModel.lstDimensions()[0];
-        var selectedDimensionTwo = chartViewModel.lstDimensions()[1];
+        var selectedDimensionOne = chartViewModel.Hirarechya()[0];
+        var selectedDimensionTwo = chartViewModel.Hirarechya()[1];
 
         var nodes = {};
 
@@ -1927,15 +2056,15 @@ function generateForceDirectedGraph() {
 
 function generateSunburstPartition() {
 
-    var dimensions = chartViewModel.lstDimensions();
-    var measures = chartViewModel.lstMeasures();
-    var parsedData = chartViewModel.parsedData();
+    var dimensions = chartViewModel.Hirarechya().slice();
+    var measures = chartViewModel.Sizea;
+    var parsedData = chartViewModel.parsedData().slice();
 
     if (dimensions.length > 0 && measures.length > 0) {
         Helper.clearSvgContainer();
         Helper.focusSvgContainer();
 
-        var selectedMeasure = measures[0];
+        var selectedMeasure = measures;
 
         var width = chartViewModel.width()//960
         var height = chartViewModel.height()//700
@@ -2045,9 +2174,9 @@ function generateSunburstPartition() {
 
 function generateSankeyDiagram() {
 
-    var dimensions = chartViewModel.lstDimensions();
-    var measures = chartViewModel.lstMeasures();
-    var parsedData = chartViewModel.parsedData();
+    var dimensions = chartViewModel.Hirarechya().slice();
+    var measures = chartViewModel.Sizea;
+    var parsedData = chartViewModel.parsedData().slice();
 
     if (dimensions.length > 1 && measures.length > 0) {
 
@@ -2056,7 +2185,7 @@ function generateSankeyDiagram() {
 
         var selectedDimensionOne = dimensions[0];
         var selectedDimensionTwo = dimensions[1];
-        var selectedMeasureOne = measures[0];
+        var selectedMeasureOne = measures;
 
         var units = selectedMeasureOne.toString();
 
@@ -2223,18 +2352,18 @@ function generateSankeyDiagram() {
 
 function generateHeatmap() {
 
-    var measures = chartViewModel.lstMeasures();
-    var parsedData = chartViewModel.parsedData();
+    var measures = chartViewModel.Xaxsisa;
+    var parsedData = chartViewModel.parsedData().slice();
 
-    if (measures.length > 2) {
+    if (measures.length > 0) {
 
         Helper.clearSvgContainer();
 
         Helper.focusSvgContainer();
 
-        var selectedMeasureOne = measures[0];
-        var selectedMeasureTwo = measures[1];
-        var selectedMeasureThree = measures[2];
+        var selectedMeasureOne = measures;
+        var selectedMeasureTwo = chartViewModel.Yaxsisa;
+        var selectedMeasureThree = chartViewModel.Sizea;
 
         var margin = { top: 50, right: 0, bottom: 100, left: 30 };
         var width = chartViewModel.width() - margin.left - margin.right; //960
@@ -2372,18 +2501,18 @@ function generateHeatmap() {
 
 function generateRadarChart() {
 
-    var dimensions = chartViewModel.lstDimensions();
-    var measures = chartViewModel.lstMeasures();
+    var dimensions = chartViewModel.Hirarechya()[0];
+    var measures = chartViewModel.Sizea;
     var parsedData = chartViewModel.parsedData();
 
-    if (dimensions.length > 1 && measures.length > 0) {
+    if (dimensions.length > 0 && measures.length > 0) {
 
         Helper.clearSvgContainer();
         Helper.focusSvgContainer();
 
-        var selectedDimensionOne = dimensions[0];
-        var selectedDimensionTwo = dimensions[1];
-        var selectedMeasure = measures[0];
+        var selectedDimensionOne = dimensions;
+        var selectedDimensionTwo = chartViewModel.Labela;
+        var selectedMeasure = measures;
 
         var formattedData = [];
         var dataToDraw = [];
@@ -2538,9 +2667,10 @@ function generateTilfordTree() {
 
 function generateCollapsibleTree() {
 
-    var dimensions = chartViewModel.lstDimensions();
-    var inputData = chartViewModel.inputData();
-    var parsedData = chartViewModel.parsedData();
+    //var dimensions = chartViewModel.lstDimensions();
+    var dimensions = chartViewModel.Hirarechya().slice();
+    var inputData = chartViewModel.inputData().slice();
+    var parsedData = chartViewModel.parsedData().slice();
 
     if (dimensions.length > 1) {
 

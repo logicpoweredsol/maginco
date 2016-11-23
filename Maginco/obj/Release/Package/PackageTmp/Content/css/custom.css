@@ -2,6 +2,26 @@
 #header-menu.navbar-default .navbar-brand {
     color: #fff;
 }
+#dv-hirarchy-container li, #dv-label-container li, #dv-size-container li, #dv-color-container li, #dv-xaxsis-container li, #dv-yaxsis-container  li{
+    margin:2px;
+    padding:2px;
+    background-color:#5bc0de;
+    text-align:center;
+}
+
+.Real-Attr{
+    background-color:#5bc0de;
+    text-align:center;
+}
+
+.list{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+}
+
 #header-menu.navbar-default {
     font-size: 14px;
     background: rgba(74, 136, 212, 1);

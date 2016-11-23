@@ -14,11 +14,14 @@
             <div class="col-md-2 col">
                 <div class="myNav">
                     @{
+                        string p = Server.MapPath("..");
+                       p = p.Replace("\\", "/");
+                        p = p + "/Resc/images/users/";
+                        string[] im =  Directory.GetFiles(p , Model.id + ".*");
 
-                        string[] im =  Directory.GetFiles(string.Concat("D:/Projects/Maginco/Code/Maginco/Maginco/Resc/images/users/"), Model.id + ".*");
                         if (im.Length !=0)
                         {
-                            im[0] = im[0].Replace("D:/Projects/Maginco/Code/Maginco/Maginco/Resc/images/users/", "/Resc/images/users/");
+                             im[0] = im[0].Replace(p, "/Resc/images/users/");
                         <img src="@im[0]" class="img-circle" style="width:80px;height:60px;border:groove">
                         }
                     }
