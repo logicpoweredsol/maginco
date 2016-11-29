@@ -2571,8 +2571,8 @@ function generateRadarChart() {
 
 function generateTilfordTree() {
 
-    var dimensions = chartViewModel.lstDimensions();
-    var parsedData = chartViewModel.parsedData();
+    var dimensions = chartViewModel.Hirarechya().slice();
+    var parsedData = chartViewModel.parsedData().slice();
 
     if (dimensions.length > 0) {
         Helper.clearSvgContainer();
@@ -2893,21 +2893,22 @@ function generateCollapsibleTree() {
 
 function generateMotionPlot() {
 
-    var measures = chartViewModel.lstMeasures();
-    var dimensions = chartViewModel.lstDimensions();
+    //var measures = chartViewModel.lstMeasures();
+    //var dimensions = chartViewModel.lstDimensions();
+    var parsedData = chartViewModel.parsedData().slice();
+    var selectedDimensionOne = chartViewModel.Labela;
+    var selectedDimensionTwo = chartViewModel.Hirarechya()[0];
+    var selectedMeasureOne = chartViewModel.Yaxsisa;
+    var selectedMeasureTwo = chartViewModel.Xaxsisa;
+    var selectedMeasureThree = chartViewModel.Sizea;
 
-    if (measures.length > 2 && dimensions.length > 1) {
+
+    if (selectedDimensionTwo.length > 0 && selectedDimensionOne.length > 0) {
 
         Helper.clearSvgContainer();
         Helper.focusSvgContainer();
 
-        var parsedData = chartViewModel.parsedData();
-        var selectedDimensionOne = dimensions[0];
-        var selectedDimensionTwo = dimensions[1];
-        var selectedMeasureOne = measures[0];
-        var selectedMeasureTwo = measures[1];
-        var selectedMeasureThree = measures[2];
-
+     
         var margin = { top: 20, right: 40, bottom: 30, left: 20 };
 
         var height = chartViewModel.height() - margin.top - margin.bottom; //400

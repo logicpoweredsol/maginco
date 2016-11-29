@@ -571,6 +571,7 @@
     <Content Include="Views\User\EditUsers.cshtml" />
     <Content Include="Views\User\EditCharts.cshtml" />
     <Content Include="Views\User\UpdateEmail.cshtml" />
+    <Content Include="Resc\SampleData\DateTime.csv" />
     <None Include="Web.production.config" />
     <None Include="Web.production.Debug.config">
       <DependentUpon>Web.production.config</DependentUpon>
