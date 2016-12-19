@@ -192,10 +192,10 @@ function ChartModel () {
     };
 
     self.updateChart = function () {
-        //var tblData = $("#tbl-data-grid").tableToJSON();
+        var tblData = $("#tbl-data-grid").tableToJSON();
 
-        //self.parsedData(tblData);
-        //Helper.clearTooltips();
+        self.parsedData(tblData);
+        Helper.clearTooltips();
 
         if (self.chartName() == enumCharts.scatterPlot) {
             generateScatterPlot();
@@ -264,8 +264,10 @@ function ChartModel () {
 
     self.clrChange = function (d, e) {
         self.color(e.target.value);
-
-        d3.select(e.target).style("fill", self.color());
+       
+        //d3.select(e.target).style("fill", e.target.value);
+        $('.Slectedc').css('fill', e.target.value);
+       $('.Slectedc').removeClass('Slectedc');
     };
 
     self.ddlShapeSizeChange = function () {
@@ -378,6 +380,26 @@ function ChartModel () {
         });
     };
 
+    self.GFFChange = function () {
+        this.updateChart();
+    }
+
+    self.GWChange = function () {
+        this.updateChart();
+    }
+
+    self.GHChange = function () {
+        this.updateChart();
+    }
+
+    self.ALchange = function () {
+        this.updateChart();
+    }
+
+    self.ddlScalechange = function () {
+        this.updateChart();
+    }
+
     self.scatterPlot = function () {
         self.chartName(enumCharts.scatterPlot);
         generateScatterPlot();
@@ -458,7 +480,7 @@ function ChartModel () {
     self.collapisbleTree = function () {
         self.chartName(enumCharts.collapsibleTree);
         generateCollapsibleTree();
-        Helper.renderGridData();
+       Helper.renderGridData();
         self.showSaveButton(true);
     }
 
@@ -481,21 +503,28 @@ var Helper = new function () {
             {
                 var newarr = _.without(chartViewModel.Hirarechya, name);
                 chartViewModel.Hirarechya(newarr);
+                chartViewModel.updateChart();
             }
             if (id == "dv-label-container") {
                 chartViewModel.Labela = "";
+                chartViewModel.updateChart();
             }
             if (id == "dv-size-container") {
                 chartViewModel.Sizea = "";
+                chartViewModel.updateChart();
+                chartViewModel.ddlShapeSizeChange();
             }
             if (id == "dv-color-container") {
                 chartViewModel.Colora = "";
+                chartViewModel.updateChart();
             }
             if (id == "dv-xaxsis-container") {
                 chartViewModel.Xaxsisa = "";
+                chartViewModel.updateChart();
             }
             if (id == "dv-yaxsis-container") {
                 chartViewModel.Yaxsisa = "";
+                chartViewModel.updateChart();
             }
         });
     });
@@ -630,6 +659,7 @@ var Helper = new function () {
                     //var p = $(ui.helper).html();
                     //var atv = p.toLowerCase();
                     chartViewModel.Hirarechya.push(atv);
+                    chartViewModel.updateChart();
                 }
                 if($(this).attr("id") == 'dv-label-container' && !$('#dv-label-container li:contains("' + $(ui.helper).html() + '")').length)
                 {
@@ -835,9 +865,11 @@ var Helper = new function () {
         xDiv.innerText = xAxisText;
         yDiv.innerText = yAxisText;
 
+        
         xLblContainer.appendChild(xDiv);
         yLblContainer.appendChild(yDiv);
 
+        
         document.querySelector("svg").appendChild(xLblContainer);
         document.querySelector("svg").appendChild(yLblContainer);
     };
@@ -898,7 +930,7 @@ var Helper = new function () {
 
                 val = singleRow[property];
 
-                if (this.containsSubstring(chartViewModel.lstMeasures(), property) || this.containsSubstring(chartViewModel.lstDimensions(), property)) {
+                if (this.containsSubstring(chartViewModel.Hirarechya(), property) || chartViewModel.Labela == property || chartViewModel.Colora == property || chartViewModel.Yaxsisa == property || chartViewModel.Xaxsisa == property || chartViewModel.Sizea == property) {
                     arrColumns.push(val);
 
                     if (!(this.containsSubstring(chartViewModel.lstHeaders(), property))) {
@@ -1130,21 +1162,17 @@ $(function () {
 
 function generateScatterPlot() {
 
-    //if (chartViewModel.lstMeasures().length > 1) {
-    if (chartViewModel.Xaxsisa.length > 0 && chartViewModel.Yaxsisa.length > 0 && chartViewModel.Sizea.length >0 ) {
-    //if(false){
+    if (chartViewModel.Xaxsisa.length > 0 && chartViewModel.Yaxsisa.length > 0) {
         Helper.clearSvgContainer();
         Helper.focusSvgContainer();
         chartViewModel.clearLegends();
 
         //var selectedMeasureOne = chartViewModel.Xaxsisa
         //var selectedMeasureTwo = chartViewModel.lstMeasures()[1];
-        //var selectedMeasureThree = chartViewModel.lstMeasures()[2] === undefined ? "" : chartViewModel.lstMeasures()[2];
-        //var selectedDimension = chartViewModel.lstDimensions()[0] === undefined ? "" : chartViewModel.lstDimensions()[0];
+        var selectedMeasureThree = chartViewModel.Sizea.length>0 ?chartViewModel.Sizea : "";
+        var selectedDimension = chartViewModel.Colora.length>0 ?chartViewModel.Colora : "";
         var selectedMeasureOne = chartViewModel.Xaxsisa;
         var selectedMeasureTwo = chartViewModel.Yaxsisa;
-        var selectedMeasureThree = chartViewModel.Sizea;
-        var selectedDimension = chartViewModel.Colora;
 
         var margin = { top: 20, right: 40, bottom: 30, left: 20 };
 
@@ -1316,7 +1344,8 @@ function generateScatterPlot() {
                         return d[selectedDimension];
                     }
                 },
-                "class": chartViewModel.shapeIdentifier
+                "class": chartViewModel.shapeIdentifier,
+              
             })
             .style({
                 "fill": function (d) {
@@ -1363,19 +1392,21 @@ function generateScatterPlot() {
                 event.preventDefault();
 
                 colorSource = event.target;
-
+                
                 $("#context-menu").show().
                 css({
                     top: event.pageY + "px",
                     left: event.pageX + "px"
                 });
+                $(".chart-shape").removeClass('Slectedc');
+                $(this).addClass('Slectedc');
             });
 
         $("svg").attr("height", totalHeight + maxBubbleSize);
         $("#g-main").attr("transform", 'translate(' + xLabelWidth + ', ' + (maxBubbleSize - 30) + ')');
     }
     else {
-        Helper.showParamsWarning(["Measure for X-axis.", "Measure for Y-axis.", "Measure for size."]);
+        Helper.showParamsWarning(["Add Scale for X-axis Attribute in 5.", "Add Scale for Y-axis Attribute 6.", "Add Scales for Size and Cluster Coloring in 3 and 4 Respectively(Optional)."]);
     }
 }
 
@@ -1827,8 +1858,8 @@ function generateTreemap() {
         var yScale = d3.scale.linear().range([0, height]);
         var color = d3.scale.category20c();
         var node;
-        var leafDimension = Helper.getLastElement(chartViewModel.Hirarechya());
-
+        //var leafDimension = Helper.getLastElement(chartViewModel.Hirarechya());
+        var leafDimension = chartViewModel.Labela;
         var treemap = d3.layout
                         .treemap()
                         .round(false)
@@ -1859,7 +1890,12 @@ function generateTreemap() {
                         "class": "cell",
                         "transform": function (d) {
                             return "translate(" + d.x + "," + d.y + ")";
-                        }
+                        },
+                         //"data-legend": function(d, i) {
+                         //    if (Helper.isNotEmpty(selectedDimensionOne)) {
+                         //        return d[selectedDimensionOne];
+                         //    }
+                         //}
                     })
                     .on("click", function (d) {
                         return zoom(node == d.parent ? root : d.parent);
@@ -1874,6 +1910,9 @@ function generateTreemap() {
                             top: event.pageY + "px",
                             left: event.pageX + "px"
                         });
+                        $(".cell").children().removeClass('Slectedc');
+                        $(this).children(':first').addClass('Slectedc');
+                     
                     });
 
         cell.append("rect")
@@ -1881,8 +1920,20 @@ function generateTreemap() {
                 "width": function (d) { return d.dx; },
                 "height": function (d) { return d.dy; }
             })
-            .style("fill", function (d) { return color(d[selectedDimensionOne]); });
-
+            //.style("fill", function (d) { return color(d[selectedDimensionOne]); });
+        //////
+        .style(
+            "fill", function (d) {
+                    var scaledColor = color(d[selectedDimensionOne]);
+                    if (!Helper.isPresentInLegend(d[selectedDimensionOne])) {
+                        chartViewModel.addLegendIcon({
+                            name: d[selectedDimensionOne],
+                            color: scaledColor,
+                        });
+                    };
+                    return scaledColor;
+            });
+        ////
         cell.append("text")
             .attr({
                 "x": function (d) { return d.dx / 2; },
@@ -2056,9 +2107,9 @@ function generateForceDirectedGraph() {
 
 function generateSunburstPartition() {
 
-    var dimensions = chartViewModel.Hirarechya().slice();
+    var dimensions = chartViewModel.Hirarechya();
     var measures = chartViewModel.Sizea;
-    var parsedData = chartViewModel.parsedData().slice();
+    var parsedData = chartViewModel.parsedData();
 
     if (dimensions.length > 0 && measures.length > 0) {
         Helper.clearSvgContainer();
@@ -2066,8 +2117,8 @@ function generateSunburstPartition() {
 
         var selectedMeasure = measures;
 
-        var width = chartViewModel.width()//960
-        var height = chartViewModel.height()//700
+        var width = chartViewModel.width();//960
+        var height = chartViewModel.height();//700
         var radius = Math.min(width, height) / 2;
 
         var xScale = d3.scale
@@ -2094,7 +2145,7 @@ function generateSunburstPartition() {
 
         var partition = d3.layout
                             .partition()
-                            .value(function (d) { return d[selectedMeasure]; });
+                            .value(function (d) { return  + d[selectedMeasure]; });
         var arc = d3.svg
                     .arc()
                     .startAngle(function (d) { return Math.max(0, Math.min(2 * Math.PI, xScale(d.x))); })
@@ -2668,15 +2719,14 @@ function generateTilfordTree() {
 function generateCollapsibleTree() {
 
     //var dimensions = chartViewModel.lstDimensions();
-    var dimensions = chartViewModel.Hirarechya().slice();
-    var inputData = chartViewModel.inputData().slice();
-    var parsedData = chartViewModel.parsedData().slice();
 
-    if (dimensions.length > 1) {
-
+    if (chartViewModel.Hirarechya().length > 1) {
         Helper.clearSvgContainer();
         Helper.focusSvgContainer();
 
+        var dimensions = chartViewModel.Hirarechya().slice();
+        var inputData = chartViewModel.inputData().slice();
+        var parsedData = chartViewModel.parsedData().slice();
         var selectedDimensionOne = dimensions[0];
         var selectedDimensionTwo = dimensions[1];
         var firstLine = inputData.split('\n')[0];
@@ -2685,16 +2735,6 @@ function generateCollapsibleTree() {
         var childCats = [];
         var baseCats = [];
         var startNode = {};
-
-        for (var i = 0; i < parsedData.length; i++) {
-
-            var isNotPresent = childCats.indexOf(parsedData[i][selectedDimensionTwo]) < 0;
-
-            if (isNotPresent) {
-                childCats.push(parsedData[i][selectedDimensionTwo]);
-            }
-        }
-
         for (var i = 0; i < parsedData.length; i++) {
 
             var isNotPresent = baseCats.indexOf(parsedData[i][selectedDimensionOne]) < 0;
@@ -2702,6 +2742,14 @@ function generateCollapsibleTree() {
 
             if (isNotPresent && isNotChild) {
                 baseCats.push(parsedData[i][selectedDimensionOne]);
+            }
+        }
+
+        for (var i = 0; i < parsedData.length; i++) {
+
+            var isNotPresent = childCats.indexOf(parsedData[i][selectedDimensionTwo]) < 0;
+            if (isNotPresent) {
+                childCats.push(parsedData[i][selectedDimensionTwo]);
             }
         }
 
@@ -2783,8 +2831,8 @@ function generateCollapsibleTree() {
             nodes.forEach(function (d) { d.y = d.depth * 180; });
 
             var node = svg.selectAll("g.node")
-                        .data(nodes, function (d) { return d.id || (d.id = ++i); });
-
+                        //.data(nodes, function (d) { return d.id || (d.id = ++i); });
+                            .data(nodes, function (d) { return (d.id = ++i); });
             var nodeEnter = node.enter()
                                 .append("g")
                                 .attr({
@@ -2875,6 +2923,105 @@ function generateCollapsibleTree() {
             });
         }
 
+        function updateonclick(source) {
+
+            var nodes = tree.nodes(root).reverse();
+            var links = tree.links(nodes);
+
+            nodes.forEach(function (d) { d.y = d.depth * 180; });
+
+            var node = svg.selectAll("g.node")
+                        .data(nodes, function (d) { return d.id || (d.id = ++i); });
+                            //.data(nodes, function (d) { return (d.id = ++i); });
+            var nodeEnter = node.enter()
+                                .append("g")
+                                .attr({
+                                    "class": "node",
+                                    "transform": function (d) { return "translate(" + source.y0 + "," + source.x0 + ")"; }
+                                })
+                                .on("click", click);
+
+            nodeEnter.append("circle")
+                    .attr("r", rad)
+                    .style({
+                        "fill": function (d) { return d._children ? "lightsteelblue" : "#fff"; },
+                        "stroke": "steelblue",
+                        "stroke-width": "2px",
+                        "cursor": "pointer"
+                    });
+
+            nodeEnter.append("text")
+                    .attr({
+                        "x": function (d) { return d.children || d._children ? -13 : 13; },
+                        "dy": ".35em",
+                        "text-anchor": function (d) { return d.children || d._children ? "end" : "start"; }
+                    })
+                    .text(function (d) { return d[selectedDimensionTwo]; })
+                    .style({
+                        "fill-opacity": 1e-6,
+                        "font-family": chartViewModel.fontFamily(),
+                        "font-size": chartViewModel.fontSize()
+                    });
+
+            var nodeUpdate = node.transition()
+                                .duration(duration)
+                                .attr("transform", function (d) { return "translate(" + d.y + "," + d.x + ")"; });
+
+            nodeUpdate.select("circle")
+                        .attr("r", rad)
+                        .style("fill", function (d) { return d._children ? "lightsteelblue" : "#fff"; });
+
+            nodeUpdate.select("text")
+                        .style("fill-opacity", 1);
+
+            var nodeExit = node.exit()
+                                .transition()
+                                .duration(duration)
+                                .attr("transform", function (d) { return "translate(" + source.y + "," + source.x + ")"; })
+                                .remove();
+
+            nodeExit.select("circle")
+                    .attr("r", rad);
+
+            nodeExit.select("text")
+                    .style("fill-opacity", 1e-6);
+
+            var link = svg.selectAll("path.link")
+                        .data(links, function (d) { return d.target.id; });
+
+            link.enter()
+                .insert("path", "g")
+                .attr({
+                    "d": function (d) {
+                        var o = { x: source.x0, y: source.y0 };
+                        return diagonal({ source: o, target: o });
+                    },
+                    "class": "link"
+                })
+                .style({
+                    "fill": "none",
+                    "stroke": "#ccc",
+                    "stroke-width": "2px",
+                });
+
+            link.transition()
+                .duration(duration)
+                .attr("d", diagonal);
+
+            link.exit()
+                .transition()
+                .duration(duration)
+                .attr("d", function (d) {
+                    var o = { x: source.x, y: source.y };
+                    return diagonal({ source: o, target: o });
+                })
+                .remove();
+
+            nodes.forEach(function (d) {
+                d.x0 = d.x;
+                d.y0 = d.y;
+            });
+        }
         function click(d) {
             if (d.children) {
                 d._children = d.children;
@@ -2883,11 +3030,12 @@ function generateCollapsibleTree() {
                 d.children = d._children;
                 d._children = null;
             }
-            update(d);
+            updateonclick(d);
+            //update(d);
         }
     }
     else {
-        Helper.showParamsWarning(["Dimensions for groups.", "Dimension for labels."]);
+        Helper.showParamsWarning(["This Graph needs more than one hirarchy Attributes at [1]."]);
     }
 }
 
@@ -2895,16 +3043,14 @@ function generateMotionPlot() {
 
     //var measures = chartViewModel.lstMeasures();
     //var dimensions = chartViewModel.lstDimensions();
-    var parsedData = chartViewModel.parsedData().slice();
+    var parsedData = chartViewModel.parsedData();
     var selectedDimensionOne = chartViewModel.Labela;
     var selectedDimensionTwo = chartViewModel.Hirarechya()[0];
     var selectedMeasureOne = chartViewModel.Yaxsisa;
     var selectedMeasureTwo = chartViewModel.Xaxsisa;
     var selectedMeasureThree = chartViewModel.Sizea;
 
-
-    if (selectedDimensionTwo.length > 0 && selectedDimensionOne.length > 0) {
-
+    if(selectedDimensionOne.length > 0 && selectedDimensionTwo.length >0){
         Helper.clearSvgContainer();
         Helper.focusSvgContainer();
 
