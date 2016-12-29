@@ -61,10 +61,12 @@ function ChartModel () {
     self.lstHeaders = ko.observableArray();
     self.Hirarechya = ko.observableArray();
     self.Sizea = ko.observable();
-    self.Colora = ko.observable();
+    self.Colora = ko.observableArray();
     self.Xaxsisa = ko.observable(null);
     self.Yaxsisa = ko.observable(null);
     self.Labela = ko.observable();
+    self.Deviation = ko.observable();
+    self.FilterToolTip = ko.observableArray();
 
     self.inputChange = function () {
         $("#form-file").submit();
@@ -154,11 +156,13 @@ function ChartModel () {
     }
 
     self.updateTooltipData = function (arr) {
+        arr = arr.filter(Object=>Object.value != undefined);
         self.lstTooltipElements(arr);
     }
 
     self.clearLegends = function () {
         self.lstLegendIcons([]);
+        self.FilterToolTip([]);
     }
 
     self.clearHeaders = function () {
@@ -192,13 +196,16 @@ function ChartModel () {
     };
 
     self.updateChart = function () {
-        var tblData = $("#tbl-data-grid").tableToJSON();
+        //var tblData = $("#tbl-data-grid").tableToJSON();
 
-        self.parsedData(tblData);
-        Helper.clearTooltips();
+        //self.parsedData(tblData);
+        //Helper.clearTooltips();
 
         if (self.chartName() == enumCharts.scatterPlot) {
             generateScatterPlot();
+            self.ddlShapeSizeChange();
+            Helper.renderGridData();
+            self.toggleGridMode(true);
         }
         else if (self.chartName() == enumCharts.streamGraph) {
             generateStreamGraph();
@@ -276,23 +283,26 @@ function ChartModel () {
         if (self.chartName() == enumCharts.scatterPlot || self.chartName() == enumCharts.bubbleChart) {
             $("svg circle").each(function (i, v) {
                 var newSize;
-
+                //if (chartViewModel.Sizea.length > 0) {
+                //    newSize = (arrSize[i] / 100) * 67;
+                //}
+                //else 
                 if (selected == "1") {
-                    newSize = (arrSize[i] / 100) * 5;
-                }
-                else if (selected == "2") {
-                    newSize = (arrSize[i] / 100) * 20;
-                }
-                else if (selected == "3") {
-                    newSize = arrSize[i];
-                }
-                else if (selected == "4") {
-                    newSize = arrSize[i] + ((arrSize[i] / 100) * 45);
-                }
-                else if (selected == "5") {
-                    newSize = arrSize[i] + ((arrSize[i] / 100) * 65);
-                }
-
+                        newSize = (arrSize[i] / 100) * 5;
+                    }
+                    else if (selected == "2") {
+                        newSize = (arrSize[i] / 100) * 20;
+                    }
+                    else if (selected == "3") {
+                        newSize = arrSize[i];
+                    }
+                    else if (selected == "4") {
+                        newSize = arrSize[i] + ((arrSize[i] / 100) * 45);
+                    }
+                    else if (selected == "5") {
+                        newSize = arrSize[i] + ((arrSize[i] / 100) * 65);
+                    }
+                
                 $(this).animate(
                     {
                         "r": newSize
@@ -389,7 +399,17 @@ function ChartModel () {
     }
 
     self.GHChange = function () {
-        this.updateChart();
+        //$("svg").style("height", chartViewModel.height);
+        self.updateChart();
+        //var h = self.height();
+        //d3.selectAll('g').attr({
+        //    'height': h,
+        //});
+    //    var svg = d3.select("svg") 
+    //        .attr("height",h)
+    //    svg.selectAll("circle")
+    //        .attr("cx", '9')
+    //        .attr("cy", '9')
     }
 
     self.ALchange = function () {
@@ -496,12 +516,12 @@ var Helper = new function () {
    
     $(document).on('click', '#close-icon', function() {
         $(this).parent().slideUp("fast", function () {
-            var name = $(this).html();
+            var name = this.firstChild.data;
             var id = $(this).parent().attr('id');
             $(this).remove()
             if(id == "dv-hirarchy-container")
             {
-                var newarr = _.without(chartViewModel.Hirarechya, name);
+                var newarr = _.without(chartViewModel.Hirarechya(), name);
                 chartViewModel.Hirarechya(newarr);
                 chartViewModel.updateChart();
             }
@@ -512,10 +532,11 @@ var Helper = new function () {
             if (id == "dv-size-container") {
                 chartViewModel.Sizea = "";
                 chartViewModel.updateChart();
-                chartViewModel.ddlShapeSizeChange();
+                //chartViewModel.ddlShapeSizeChange();
             }
             if (id == "dv-color-container") {
-                chartViewModel.Colora = "";
+                var newcarr = _.without(chartViewModel.Colora(), name);
+                chartViewModel.Colora(newcarr);
                 chartViewModel.updateChart();
             }
             if (id == "dv-xaxsis-container") {
@@ -526,6 +547,11 @@ var Helper = new function () {
                 chartViewModel.Yaxsisa = "";
                 chartViewModel.updateChart();
             }
+            if (id == "dv-dev-container") {
+                chartViewModel.Deviation = "";
+                chartViewModel.updateChart();
+            }
+ 
         });
     });
     this.initTooltips = function () {
@@ -630,8 +656,8 @@ var Helper = new function () {
 
                 value = sampleObject[property]
                 if (Helper.isNumber(value)) {
-                    //lstMeasures.push(optStart + property.toUpperCase() + '<span id="mydata"> || integer</span>' + optEnd);
-                    lstMeasures.push(optStart + property + '<span id="mydata"> || integer</span>' + optEnd);
+                    //lstMeasures.push(optStart + property.toUpperCase() + '<span id="mydata"> || numeric</span>' + optEnd);
+                    lstMeasures.push(optStart + property + '<span id="mydata"> || numeric</span>' + optEnd);
                 
                 }
                 else {
@@ -647,7 +673,7 @@ var Helper = new function () {
     }
 
     this.initWidgets = function () {
-        $("#dv-hirarchy-container, #dv-label-container, #dv-size-container, #dv-color-container, #dv-xaxsis-container, #dv-yaxsis-container ").droppable({
+        $("#dv-hirarchy-container, #dv-label-container, #dv-size-container, #dv-color-container, #dv-xaxsis-container, #dv-yaxsis-container, #dv-dev-container ").droppable({
             accept: ".list-group-item",
            
             drop: function (ev, ui) {
@@ -674,7 +700,7 @@ var Helper = new function () {
                     chartViewModel.updateChart();
                 }
                 if ($(this).attr("id") == 'dv-size-container' && !$('#dv-size-container li:contains("' + $(ui.helper).html() + '")').length) {
-                    if (c == " || integer") {
+                    if (c == " || numeric") {
                         if ($(this).children('li').length > 0) {
                             $(this).children('li').remove();
                             chartViewModel.Sizea = "";
@@ -684,22 +710,26 @@ var Helper = new function () {
                         //var p = $(ui.helper).html();
                         //chartViewModel.Sizea = p.toLowerCase();
                         chartViewModel.updateChart();
+                        //chartViewModel.ddlShapeSizeChange();
                         
                     }
                 }
                 if ($(this).attr("id") == 'dv-color-container' && !$('#dv-color-container li:contains("' + $(ui.helper).html() + '")').length) {
-                    if ($(this).children('li').length > 0) {
-                        $(this).children('li').remove();
-                        chartViewModel.Colora = "";
-                    }
+                    if ($(this).children('li').length < 7 && c != " || numeric") {
+                    //    $(this).children('li').remove();
+                    //    chartViewModel.Colora = "";
+                    //}
                     $(this).append('<li>' + $(ui.helper).html() + '<span class="close" id = "close-icon" >&times;</span>' + '</li>');
-                    chartViewModel.Colora = $(ui.helper).html();
+                    //chartViewModel.Colora = $(ui.helper).html();
                     //var p = $(ui.helper).html();
                     //chartViewModel.Colora = p.toLowerCase();
+                    var natv = $(ui.helper).html();
+                    chartViewModel.Colora.push(natv);
                     chartViewModel.updateChart();
                 }
+                }
                 if ($(this).attr("id") == 'dv-xaxsis-container' && !$('#dv-xaxsis-container li:contains("' + $(ui.helper).html() + '")').length) {
-                    if (c == " || integer") {
+                    if (c == " || numeric") {
                     if ($(this).children('li').length > 0) {
                         $(this).children('li').remove();
                         chartViewModel.Xaxsisa = "";
@@ -712,7 +742,7 @@ var Helper = new function () {
                 }
                 }
                 if ($(this).attr("id") == 'dv-yaxsis-container' && !$('#dv-yaxsis-container li:contains("' + $(ui.helper).html() + '")').length) {
-                    if (c == " || integer") {
+                    if (c == " || numeric") {
                     if ($(this).children('li').length > 0) {
                         $(this).children('li').remove();
                         chartViewModel.Yaxsisa = "";
@@ -724,11 +754,49 @@ var Helper = new function () {
                         chartViewModel.updateChart();
                     }
                 }
+                if ($(this).attr("id") == 'dv-dev-container' && !$('#dv-dev-container li:contains("' + $(ui.helper).html() + '")').length) {
+                    if (c == " || numeric") {
+                        if ($(this).children('li').length > 0) {
+                            $(this).children('li').remove();
+                            chartViewModel.Yaxsisa = "";
+                        }
+                        $(this).append('<li>' + $(ui.helper).html() + '<span class="close" id = "close-icon" >&times;</span>' + '</li>');
+                        chartViewModel.Deviation = $(ui.helper).html();
+                        chartViewModel.updateChart();
+                    }
                 }
-        }).sortable();
+                }
+        }).sortable({
+            stop: function (event, ui) {
+                var listelements = $(event.target).children();
+                var tarea = event.target.id;
+                if (tarea == "dv-hirarchy-container")
+                    {
+                chartViewModel.Hirarechya([]);
+                for (var i = 1; i < listelements.length; i++)
+                {
+                    var avalue = listelements[i].innerText.slice(0, -1);
+                    chartViewModel.Hirarechya.push(avalue);
+                }
+                //listelements.forEach(function (listelements) {
+                //    chartViewModel.Hirarechya.push(element.html());
+                    //});
+                }
+                if (tarea == "dv-color-container")
+                {
+                    chartViewModel.Colora([]);
+                    for (var i = 1; i < listelements.length; i++) {
+                        var avalue = listelements[i].innerText.slice(0, -1);
+                        chartViewModel.Colora.push(avalue);
+                    }
+                }
+                chartViewModel.updateChart();
+            }
+        });
         $("#dv-customization-widget").draggable();
         $("#dv-thumbs-widget").draggable();
         $("#dv-theming-widget").draggable();
+        //$("#dv-hirarchy-container").sor
     };
 
     this.expandLists = function () {
@@ -930,7 +998,7 @@ var Helper = new function () {
 
                 val = singleRow[property];
 
-                if (this.containsSubstring(chartViewModel.Hirarechya(), property) || chartViewModel.Labela == property || chartViewModel.Colora == property || chartViewModel.Yaxsisa == property || chartViewModel.Xaxsisa == property || chartViewModel.Sizea == property) {
+                if (this.containsSubstring(chartViewModel.Hirarechya(), property) || chartViewModel.Labela == property || this.containsSubstring(chartViewModel.Colora(), property) || chartViewModel.Yaxsisa == property || chartViewModel.Xaxsisa == property || chartViewModel.Sizea == property || chartViewModel.Deviation == property) {
                     arrColumns.push(val);
 
                     if (!(this.containsSubstring(chartViewModel.lstHeaders(), property))) {
@@ -1148,8 +1216,22 @@ $(function () {
         var showLegendItems = $(this).prop("checked");
         var legendItem = $(this).attr("data-legend");
         var itemsSelector = shapeSelector + "[data-legend='" + legendItem + "']";
-
+        //var ets = shapeSelector + "." + legendItem;
         d3.selectAll(itemsSelector.toString())
+            .transition()
+            .duration(500)
+            .style({
+                "opacity": function () {
+                    return showLegendItems ? "1" : "0";
+                }
+            });
+    });
+    $("#dv-a-legend").on("click", ".check-legend", function () {
+        var showLegendItems = $(this).prop("checked");
+        var legendItem = $(this).attr("data-legend");
+        //var itemsSelector = shapeSelector + "[data-legend='" + legendItem + "']";
+        var ets = shapeSelector + "." + legendItem;
+        d3.selectAll(ets.toString())
             .transition()
             .duration(500)
             .style({
@@ -1170,12 +1252,39 @@ function generateScatterPlot() {
         //var selectedMeasureOne = chartViewModel.Xaxsisa
         //var selectedMeasureTwo = chartViewModel.lstMeasures()[1];
         var selectedMeasureThree = chartViewModel.Sizea.length>0 ?chartViewModel.Sizea : "";
-        var selectedDimension = chartViewModel.Colora.length>0 ?chartViewModel.Colora : "";
+        var selectedDimension = chartViewModel.Colora().length>0 ?chartViewModel.Colora()[0] : "";
         var selectedMeasureOne = chartViewModel.Xaxsisa;
         var selectedMeasureTwo = chartViewModel.Yaxsisa;
+        var selectedDeviation = chartViewModel.Deviation;
 
+        if (chartViewModel.Colora().length > 1)
+        {
+            //var arrObject = [];
+            for(var i=1;i<chartViewModel.Colora().length;i++)
+            {
+                var arrObject = [];
+                var checkv = "";
+                var satt = chartViewModel.Colora()[i];
+                chartViewModel.parsedData().forEach(function (d) {
+                    checkv = d[satt];
+                    if (arrObject.length == 0)
+                    {
+                        arrObject.push({ name: checkv });
+                    }
+                    var checkarray = true;
+                    arrObject.forEach(function (b) {
+                        if (b.name == checkv)
+                            checkarray = false;
+                    });
+                        if (checkarray) {
+                            arrObject.push({ name :checkv });
+                        }
+
+                });
+                chartViewModel.FilterToolTip.push(arrObject);
+            }
+        }
         var margin = { top: 20, right: 40, bottom: 30, left: 20 };
-
         var height = chartViewModel.height() - margin.top - margin.bottom; //400
         var width = chartViewModel.width() - margin.left - margin.right;  //800
         var totalWidth = width + margin.right + margin.left;
@@ -1186,7 +1295,19 @@ function generateScatterPlot() {
         var maxBubbleSize = 50;
         var yScale;
         var xScale;
-
+        var selectedAV = [];
+        if (chartViewModel.Deviation.length > 0)
+        {
+            var satt = chartViewModel.Deviation;
+            var pdata = chartViewModel.parsedData();
+            
+            for(var i =0; i<pdata.length;i++)
+            {
+               selectedAV[i] = pdata[i][satt];
+            }
+        }
+        var selectedAVH = Math.max.apply(Math, selectedAV);
+        //chartViewModel.parsedData().each()
         arrSize = [];
 
         if (chartViewModel.scaleType() == enumScales.log) {
@@ -1340,26 +1461,56 @@ function generateScatterPlot() {
                     return scaledSize;
                 },
                 "data-legend": function(d, i) {
-                    if(Helper.isNotEmpty(selectedDimension)){
+                    if (Helper.isNotEmpty(selectedDimension)) {
                         return d[selectedDimension];
                     }
                 },
-                "class": chartViewModel.shapeIdentifier,
+                "class": function (d, i) {
+                    if (chartViewModel.Colora().length > 1) {
+                        var first = ""; var second = ""; var third = ""; var fourth = ""; var fifth = "";
+                        for (var i = 1; i < chartViewModel.Colora().length; i++) {
+                            if (i == 1) {
+                                first = d[chartViewModel.Colora()[i]];
+                            }
+                            if (i == 2) {
+                                second = d[chartViewModel.Colora()[i]];
+                            }
+                            if (i == 3) {
+                                third = d[chartViewModel.Colora()[i]];
+                            }
+                            if (i == 4) {
+                                fourth = d[chartViewModel.Colora()[i]];
+                            }
+                            if (i == 5) {
+                                fifth = d[chartViewModel.Colora()[i]];
+                            }
+                        }
+                        return chartViewModel.shapeIdentifier + " " + first + " " + second + " " + third + " " + fourth + " " + fifth;
+                    }
+                    else {
+                        return chartViewModel.shapeIdentifier;
+                    }
+                }
               
             })
             .style({
                 "fill": function (d) {
                     if (Helper.isNotEmpty(selectedDimension)) {
                         var scaledColor = colorScale(d[selectedDimension]);
-
                         if (!Helper.isPresentInLegend(d[selectedDimension])) {
                             chartViewModel.addLegendIcon({
                                 name: d[selectedDimension],
                                 color: scaledColor,
                             });
                         };
-
-                        return scaledColor;
+                        if (chartViewModel.Deviation.length > 0) {
+                            var svalue = d[chartViewModel.Deviation];
+                            vb = svalue / selectedAVH;
+                            return d3.rgb(scaledColor).darker(Math.log(vb));
+                        }
+                        else {
+                            return scaledColor;
+                        }
                     }
                 },
                 "fill-opacity": "0.5"
@@ -1368,16 +1519,26 @@ function generateScatterPlot() {
 
                 var data = [
                     {
-                        key: 'X-Axis',
+                        key: chartViewModel.Xaxsisa,
                         value: d[selectedMeasureOne]
                     },
                     {
-                        key: 'Y-Axis',
+                        key: chartViewModel.Yaxsisa,
                         value: d[selectedMeasureTwo]
                     },
                     {
-                        key: 'Size',
-                        value: d[selectedMeasureThree] == "" ? "Auto" : d[selectedMeasureThree]
+                        key: chartViewModel.Sizea.length == 0 ? "Size":chartViewModel.Sizea,
+                        value: chartViewModel.Sizea.length == 0 ? "Auto" : d[chartViewModel.Sizea]
+                        //key: "Size",
+                        //value: "Auto"
+                    },
+                    {
+                        key: chartViewModel.Deviation = ""? "" : chartViewModel.Deviation,
+                        value: d[selectedDeviation] 
+                    },
+                    {
+                        key: chartViewModel.Colora = "" ? "" : chartViewModel.Colora,
+                        value: d[chartViewModel.Colora]
                     }
                 ];
 
@@ -2266,8 +2427,20 @@ function generateSankeyDiagram() {
         var path = sankey.link();
 
         var graph = { "nodes": [], "links": [] };
-
+        var parentNA = [];
+        var i = 0;
         parsedData.forEach(function (d) {
+            //if (!Helper.isPresentInLegend(d[selectedDimensionOne])) {
+            //    chartViewModel.addLegendIcon({
+            //        name: d[selectedDimensionOne],
+            //        color: scaledColor,
+            //    });
+            //};
+            if (!parentNA.indexOf(d[selectedDimensionOne]) > -1)
+            {
+                parentNA[i] = d[selectedDimensionOne];
+                i = i + 1;
+            }
             graph.nodes.push({ "name": d[selectedDimensionOne] });
             graph.nodes.push({ "name": d[selectedDimensionTwo] });
 
@@ -2397,7 +2570,7 @@ function generateSankeyDiagram() {
         }
     }
     else {
-        Helper.showParamsWarning(["Dimension for groups.", "Dimension for labels.", "Measure for size."]);
+        Helper.showParamsWarning(["Drop 2 Hirarichy Attributes in [1]", "Drop Size Attribute in [3  ]"]);
     }
 }
 

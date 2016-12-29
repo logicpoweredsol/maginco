@@ -108,6 +108,7 @@
                                 <option value="populationpyramid.csv">Population</option>
                                 <option value="motionplot.csv">Motion Plot</option>
                                 <option value="DateTime.csv">Date Time</option>
+                                <option value="ValuesOnly.csv">Values Only</option>
                             </select>
                         </div>
                     </div>
@@ -170,6 +171,13 @@
                                     <div id="dv-yaxsis-container" class="col-md-4 list-unstyled margin-t-sm border-all" style="height:auto;padding:10px">
                                         <p class="text-center text-placeholder" style="font-size:12px;font-weight:600"><b>[6]</b> Drop Y-Axsis Attribute Here Only Number</p>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div id="dv-dev-container" class="col-md-4 list-unstyled margin-t-sm border-all" style="height:auto;padding:10px">
+                                        <p class="text-center text-placeholder" style="font-size:12px;font-weight:600"><b>[7]</b> Drop Here To Watch Deviations (Only Numeric Values) </p>
+                                    </div>         
                                 </div>
                             </div>
                             <div class="row" style="margin:12px">
@@ -323,6 +331,14 @@
 
                             <div class="form-group margin-t-lg">
                                 <h2 id="lblGraphTitle" class="text-muted text-center text-uppercase margin-t-none" data-bind="text: title, style: {'font-family': titleFont, 'font-size': titleSize() + 'px'}"></h2>
+                                <div id="dv-a-legend" data-bind="foreach: FilterToolTip">
+                                    <div class="col-lg-12 text-center" data-bind="foreach: $data">
+                                        <span>
+                                            <label data-bind="text: $data.name"></label>
+                                            <input type="checkbox" class="check-legend" data-bind="attr: { 'data-legend': $data.name }" checked />
+                                        </span>
+                                    </div>
+                                </div>                           
                                 <div id="dv-legend" class="col-lg-12 text-center" data-bind="foreach: lstLegendIcons">
                                     <span>
                                         <i class="glyphicon glyphicon-stop icon-legend" data-bind="style: {color: color}, attr: { 'data-legend': name }"></i>

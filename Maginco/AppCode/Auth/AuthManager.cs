@@ -41,7 +41,7 @@ namespace Maginco.AppCode.Auth
         {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new AuthDbContext()));
 
-            if (!roleManager.RoleExists(AppConsts.AppRoles.ADMIN.ToString()))
+            if (!roleManager.RoleExists(Maginco.AppCode.AppConsts.AppRoles.ADMIN.ToString()))
             {
                 IdentityRole role = new IdentityRole();
 

@@ -10,10 +10,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>11/29/2016 16:44:36</publishTime>
+      <publishTime>12/21/2016 21:36:53</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>11/29/2016 16:44:36</publishTime>
+      <publishTime>12/21/2016 21:36:53</publishTime>
     </File>
     <File Include="bin/AutoMapper.dll">
       <publishTime>08/12/2016 13:21:44</publishTime>
@@ -46,7 +46,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/20/2016 16:56:14</publishTime>
     </File>
     <File Include="bin/Maginco.dll">
-      <publishTime>11/29/2016 16:35:22</publishTime>
+      <publishTime>12/21/2016 21:36:30</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNet.Identity.Core.dll">
       <publishTime>04/03/2015 17:07:22</publishTime>
@@ -301,7 +301,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/28/2015 04:04:30</publishTime>
     </File>
     <File Include="Content/css/custom.css">
-      <publishTime>11/18/2016 16:01:30</publishTime>
+      <publishTime>12/21/2016 21:04:41</publishTime>
     </File>
     <File Include="Content/css/libs/bootstrap/bootstrap-multiselect.css">
       <publishTime>07/18/2016 18:13:00</publishTime>
@@ -457,7 +457,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/06/2016 15:02:25</publishTime>
     </File>
     <File Include="Content/js/custom/ko-create-chart.js">
-      <publishTime>11/28/2016 15:49:27</publishTime>
+      <publishTime>12/21/2016 21:34:28</publishTime>
     </File>
     <File Include="Content/js/custom/ko-dashboard.js">
       <publishTime>10/17/2016 16:37:28</publishTime>
@@ -553,7 +553,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/03/2016 13:48:16</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>11/29/2016 16:44:23</publishTime>
+      <publishTime>12/21/2016 21:36:31</publishTime>
     </File>
     <File Include="Resc/images/theme/13428586_10153661707706711_9137131089217469024_n-lightbox.png">
       <publishTime>09/21/2016 13:43:15</publishTime>
@@ -765,6 +765,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Resc/SampleData/scatter.csv">
       <publishTime>09/06/2016 16:01:21</publishTime>
     </File>
+    <File Include="Resc/SampleData/ValuesOnly.csv">
+      <publishTime>12/21/2016 21:25:49</publishTime>
+    </File>
     <File Include="Resc/SampleData/wordsfrequency.csv">
       <publishTime>07/18/2016 18:13:05</publishTime>
     </File>
@@ -802,7 +805,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/06/2016 14:39:32</publishTime>
     </File>
     <File Include="Views/User/CreateChart.cshtml">
-      <publishTime>11/29/2016 15:46:12</publishTime>
+      <publishTime>12/21/2016 21:26:44</publishTime>
     </File>
     <File Include="Views/User/Dashboard.cshtml">
       <publishTime>11/04/2016 15:14:11</publishTime>

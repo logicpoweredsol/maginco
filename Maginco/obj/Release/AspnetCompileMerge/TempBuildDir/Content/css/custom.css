@@ -2,7 +2,7 @@
 #header-menu.navbar-default .navbar-brand {
     color: #fff;
 }
-#dv-hirarchy-container li, #dv-label-container li, #dv-size-container li, #dv-color-container li, #dv-xaxsis-container li, #dv-yaxsis-container  li{
+#dv-hirarchy-container li, #dv-label-container li, #dv-size-container li, #dv-color-container li, #dv-xaxsis-container li, #dv-yaxsis-container li, #dv-dev-container li {
     margin:2px;
     padding:2px;
     background-color:#5bc0de;
